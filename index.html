@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Hello, S-Class Hunter!</title>
+<title>Galaxy</title>
 <style>
 :root{--bg:#0b0b0f;--yellow:#fee500;--blue:#3b6cff}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
@@ -22,8 +22,14 @@ body{background:var(--bg);font-family:-apple-system,"Apple SD Gothic Neo","Noto 
 .bat{display:inline-block;width:20px;height:10px;border:1.5px solid currentColor;border-radius:3px;position:relative}
 .bat::after{content:"";position:absolute;inset:1px;width:75%;background:currentColor;border-radius:1px}
 .navbar{height:30px;flex:none;display:flex;justify-content:center;align-items:center;gap:60px;background:inherit}
-.home-ind{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:110px;height:4px;border-radius:2px;background:#888;z-index:100;cursor:pointer}
-.view{position:absolute;inset:0;display:none;flex-direction:column;padding-bottom:20px}
+.nav{position:absolute;bottom:0;left:0;right:0;height:44px;display:flex;justify-content:center;align-items:center;gap:40px;z-index:100;background:#fff;color:#222}
+.nav.dark{background:transparent;color:#fff}
+.nav button{background:none;border:0;width:56px;height:44px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:inherit}
+.nav i{display:block}
+.nav .rc{width:2px;height:16px;background:currentColor;box-shadow:7px 0 0 currentColor,-7px 0 0 currentColor}
+.nav .hm{width:16px;height:16px;border:2px solid currentColor;border-radius:50%}
+.nav .bk{width:11px;height:11px;border-left:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg);margin-left:4px}
+.view{position:absolute;inset:0;display:none;flex-direction:column;padding-bottom:44px}
 .view.on{display:flex}
 .body{flex:1;overflow-y:auto}
 /* ===== Home ===== */
@@ -53,7 +59,7 @@ body{background:var(--bg);font-family:-apple-system,"Apple SD Gothic Neo","Noto 
 .inp button{border:0;background:var(--blue);color:#fff;border-radius:16px;padding:9px 14px;font-weight:700;cursor:pointer;font-size:13px}
 .replyto{font-size:12px;color:var(--blue);padding:6px 16px;background:#eef2ff;display:none;justify-content:space-between}
 .empty{text-align:center;color:#aaa;padding:60px 0;font-size:14px}
-.fab{position:absolute;right:18px;bottom:44px;width:52px;height:52px;border-radius:50%;background:var(--blue);color:#fff;font-size:26px;border:0;box-shadow:0 4px 12px rgba(59,108,255,.5);cursor:pointer}
+.fab{position:absolute;right:18px;bottom:60px;width:52px;height:52px;border-radius:50%;background:var(--blue);color:#fff;font-size:26px;border:0;box-shadow:0 4px 12px rgba(59,108,255,.5);cursor:pointer}
 .write{padding:14px;background:#fff;flex:1;display:flex;flex-direction:column;gap:10px}
 .write textarea{flex:1;border:0;outline:none;font:inherit;font-size:16px;resize:none}
 .write .note{font-size:12px;color:#999}
@@ -83,8 +89,22 @@ body{background:var(--bg);font-family:-apple-system,"Apple SD Gothic Neo","Noto 
 .rin{flex:none;display:flex;gap:8px;padding:8px 10px 10px;background:#fff;align-items:center}
 .rin input{flex:1;border:0;background:#f2f2f2;border-radius:18px;padding:10px 14px;font:inherit;font-size:14px;outline:none}
 .rin button{border:0;background:var(--yellow);border-radius:16px;padding:9px 13px;font-weight:700;cursor:pointer}
-.toast{position:absolute;bottom:70px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.8);color:#fff;font-size:13px;padding:8px 16px;border-radius:18px;opacity:0;transition:.3s;pointer-events:none;z-index:200}
+.toast{position:absolute;bottom:80px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.8);color:#fff;font-size:13px;padding:8px 16px;border-radius:18px;opacity:0;transition:.3s;pointer-events:none;z-index:200}
 .toast.on{opacity:1}
+.btabs{flex:none;display:flex;background:#fff;border-bottom:1px solid #eee;overflow-x:auto}
+.btabs div{flex:none;padding:11px 15px;font-size:14px;color:#888;cursor:pointer;white-space:nowrap}
+.btabs div.on{color:#3b6cff;font-weight:700;border-bottom:2px solid #3b6cff}
+.igh{font-style:italic;font-family:"Snell Roundhand",cursive,serif;font-size:26px}
+.stories{display:flex;gap:12px;padding:10px 12px;overflow-x:auto;border-bottom:1px solid #eee}
+.story{text-align:center;font-size:11px;flex:none;width:62px}
+.story .rg{width:58px;height:58px;border-radius:50%;padding:3px;background:linear-gradient(45deg,#feda75,#d62976,#4f5bd5);margin-bottom:3px}
+.story .rg div{width:100%;height:100%;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:24px;border:2px solid #fff}
+.igp .top{display:flex;align-items:center;gap:8px;padding:10px 12px;font-weight:600;font-size:14px}
+.igp .acts{padding:8px 12px 4px}.igp .cap{padding:0 12px 14px;font-size:13.5px;line-height:1.45}
+.pic{width:100%;aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:90px;background-size:cover;background-position:center}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}.grid3 .pic{font-size:36px;cursor:pointer}
+.sms .bub{background:#e9ecef}.sms .me .bub{background:var(--blue);color:#fff}
+.sms .rh,.sms .rin{background:#fff}.sms .rin button{background:var(--blue);color:#fff}.sms .tm{color:#999}
 </style>
 </head>
 <body>
@@ -98,6 +118,9 @@ body{background:var(--bg);font-family:-apple-system,"Apple SD Gothic Neo","Noto 
   <div class="apps">
     <div class="app" data-open="comm"><div class="ico" style="background:#fff">💬</div>커뮤니티</div>
     <div class="app" data-open="talk"><div class="ico" style="background:var(--yellow)">🗨️</div>헌톡</div>
+    <div class="app" data-open="insta"><div class="ico" style="background:linear-gradient(45deg,#feda75,#d62976,#4f5bd5)">📷</div>인스타그램</div>
+    <div class="app" data-open="gallery"><div class="ico" style="background:#ffd54f">🖼️</div>갤러리</div>
+    <div class="app" data-open="smsl"><div class="ico" style="background:#3b82f6">✉️</div>메시지</div>
     <div class="app" onclick="toast('이벤트와 관련 없는 앱입니다')"><div class="ico" style="background:#34c759">📞</div>전화</div>
     <div class="app" onclick="toast('이벤트와 관련 없는 앱입니다')"><div class="ico" style="background:#5ac8fa">🌐</div>인터넷</div>
   </div>
@@ -107,12 +130,13 @@ body{background:var(--bg);font-family:-apple-system,"Apple SD Gothic Neo","Noto 
 <!-- COMMUNITY -->
 <section class="view" id="comm" style="top:34px">
   <div class="hdr"><span>익명 커뮤니티</span><button onclick="openWrite()" title="글쓰기">✏️</button></div>
+  <div class="btabs" id="btabs"></div>
   <div class="body" id="feed"></div>
   <button class="fab" onclick="openWrite()">+</button>
 </section>
 <section class="view" id="write" style="top:34px;background:#fff">
   <div class="hdr"><button onclick="show('comm')">←</button><span>글쓰기</span><button onclick="submitPost()" style="font-size:15px;color:var(--blue);font-weight:700">등록</button></div>
-  <div class="write"><textarea id="wtxt" placeholder="내용을 입력하세요. 닉네임은 자동으로 부여됩니다."></textarea><div class="note">다른 사람을 비방하는 게시글은 삭제될 수 있습니다.</div></div>
+  <div class="write"><textarea id="wtxt" placeholder="내용을 입력하세요. 닉네임은 자동으로 부여됩니다."></textarea><div class="note">🔒 등록 시 S000~S999 중 랜덤 닉네임이 부여됩니다.</div></div>
 </section>
 <section class="view" id="detail" style="top:34px;background:#f4f5f7">
   <div class="hdr"><button onclick="show('comm');renderFeed()">←</button><span>게시글</span><span style="width:24px"></span></div>
@@ -133,8 +157,36 @@ body{background:var(--bg);font-family:-apple-system,"Apple SD Gothic Neo","Noto 
   <div class="rin"><input id="min" placeholder="메시지 입력" onkeydown="if(event.key==='Enter')sendMsg()"><button onclick="sendMsg()">전송</button></div>
 </section>
 
+<!-- 인스타그램 -->
+<section class="view" id="insta" style="top:34px;background:#fff">
+  <div class="hdr"><span class="igh">Instagram</span><button onclick="toast('DM은 사용할 수 없습니다')">✈️</button></div>
+  <div class="body" id="igbody"></div>
+</section>
+<!-- 갤러리 -->
+<section class="view" id="gallery" style="top:34px;background:#fff">
+  <div class="hdr"><span>갤러리</span><button onclick="toast('검색은 사용할 수 없습니다')">🔍</button></div>
+  <div class="body"><div class="grid3" id="gbody"></div></div>
+</section>
+<section class="view" id="galview" style="top:34px;background:#000;color:#fff">
+  <div class="hdr" style="background:#000;color:#fff;border:0"><button onclick="show('gallery')" style="color:#fff">←</button><span id="gvt" style="font-size:15px"></span><span style="width:24px"></span></div>
+  <div class="body" id="gvbody" style="display:flex;align-items:center"></div>
+</section>
+<!-- 메시지(문자) -->
+<section class="view" id="smsl" style="top:34px;background:#fff">
+  <div class="hdr"><span>메시지</span><button onclick="toast('검색은 사용할 수 없습니다')">🔍</button></div>
+  <div class="body" id="slbody"></div>
+</section>
+<section class="view sms" id="smst" style="top:34px;background:#fff">
+  <div class="rh"><button onclick="show('smsl');renderSmsList()">←</button><span id="stname"></span></div>
+  <div class="msgs" id="stmsgs" style="background:#fff"></div>
+  <div class="rin"><input id="sin" placeholder="문자 메시지" onkeydown="if(event.key==='Enter')sendSms()"><button onclick="sendSms()">전송</button></div>
+</section>
 <div class="toast" id="toast"></div>
-<div class="home-ind" onclick="goHome()"></div>
+<div class="nav dark" id="nav">
+  <button onclick="toast('최근 사용 앱이 없습니다')" aria-label="최근 앱"><i class="rc"></i></button>
+  <button onclick="goHome()" aria-label="홈"><i class="hm"></i></button>
+  <button onclick="goBack()" aria-label="뒤로"><i class="bk"></i></button>
+</div>
 </div></div>
 
 <script>
@@ -145,12 +197,21 @@ const ME = { name: "나", emoji: "🙂" };          // 헌톡에서 보이는 �
 
 // 커뮤니티 초기 게시글 (nick을 "S123"처럼 지정, likes는 초기 좋아요 수)
 const SEED_POSTS = [
-  { id:"p1", nick:"S482", text:"요즘 우리 동네 이상한 소문 도는 거 아시는 분?", likes:12, time:"10분 전",
+  { id:"p1", board:"free", nick:"S482", text:"요즘 우리 동네 이상한 소문 도는 거 아시는 분?", likes:12, time:"10분 전",
     comments:[
       { id:"c1", nick:"S019", text:"저도 들었어요… 밤마다 그 건물에 불이 켜진대요", likes:5, time:"8분 전",
         replies:[{ id:"r1", nick:"S482", text:"헐 그거 맞아요. 자세히 좀 알려주세요", likes:2, time:"5분 전" }] }
     ]},
-  { id:"p2", nick:"S731", text:"오늘 점심 뭐 먹을지 추천 좀요", likes:3, time:"1시간 전", comments:[] }
+  { id:"p2", board:"free", nick:"S731", text:"오늘 점심 뭐 먹을지 추천 좀요", likes:3, time:"1시간 전", comments:[] },
+  { id:"p3", board:"qna", nick:"S204", text:"수강신청 정정기간 언제까지인가요?", likes:1, time:"2시간 전", comments:[] },
+  { id:"p4", board:"grad", nick:"S655", text:"졸업하고 나서 제일 후회되는 것 하나만 말해줄게요", likes:9, time:"어제", comments:[] },
+  { id:"p5", board:"review", nick:"S318", text:"지난 행사 후기 남깁니다. 생각보다 재밌었어요!", likes:4, time:"어제", comments:[] }
+];
+
+// 게시판 목록 (id는 SEED_POSTS의 board 값과 일치해야 함)
+const BOARDS = [
+  { id:"free", name:"자유 게시판" }, { id:"qna", name:"질문 게시판" },
+  { id:"grad", name:"졸업생 게시판" }, { id:"review", name:"후기 게시판" }
 ];
 
 // 헌톡 친구 + 채팅방 (from:"them"=상대, "me"=나)
@@ -165,13 +226,35 @@ const CHATS = [
   { id:"k3", name:"단톡방 (5)", emoji:"👥", status:"내일 몇 시에 모여?", unread:5,
     msgs:[ { from:"them", who:"이도윤", text:"내일 몇 시에 모여?", time:"오후 1:40" } ]}
 ];
+
+// 인스타그램 게시물: img에 사진 경로(예: "images/a.jpg")를 넣으면 사진이 표시되고, 비우면 bg+emoji로 표시됨
+const INSTA = [
+  { id:"i1", user:"hunter_official", emoji:"🌃", bg:"linear-gradient(135deg,#232526,#414345)", img:"",
+    caption:"오늘 밤, 여기서 만나자 #비밀", likes:128, time:"3시간 전", comments:[{user:"minji_0", text:"어디예요?"}] },
+  { id:"i2", user:"doyun_lee", emoji:"🍜", bg:"linear-gradient(135deg,#f6d365,#fda085)", img:"",
+    caption:"점심은 역시 라면", likes:42, time:"어제", comments:[] }
+];
+
+// 갤러리 사진 (img를 비우면 bg+emoji로 표시됨)
+const GALLERY = [
+  { id:"g1", emoji:"📸", bg:"#cfd8dc", img:"", title:"IMG_0231", date:"11월 24일" },
+  { id:"g2", emoji:"🗝️", bg:"#ffe0b2", img:"", title:"IMG_0232", date:"11월 24일" },
+  { id:"g3", emoji:"🌙", bg:"#9fa8da", img:"", title:"IMG_0233", date:"11월 23일" },
+  { id:"g4", emoji:"📄", bg:"#c8e6c9", img:"", title:"IMG_0234", date:"11월 22일" }
+];
+
+// 메시지(문자) 앱 대화 (헌톡과 별개)
+const SMS = [
+  { id:"s1", name:"010-1234-5678", emoji:"👤", msgs:[{ from:"them", text:"[Web발신] 인증번호는 482913 입니다.", time:"오후 2:10" }] },
+  { id:"s2", name:"택배", emoji:"📦", msgs:[{ from:"them", text:"고객님의 상품이 배송 완료되었습니다.", time:"오전 9:30" }] }
+];
 /* ===================================================== */
 
 const $ = id => document.getElementById(id);
-const KEY = "galaxy-event-v1";
+const KEY = "galaxy-event-v2";
 let S;
 try { S = JSON.parse(localStorage.getItem(KEY)); } catch(e){}
-if (!S) S = { posts: JSON.parse(JSON.stringify(SEED_POSTS)), chats: JSON.parse(JSON.stringify(CHATS)), liked:{} };
+if (!S) S = { posts: JSON.parse(JSON.stringify(SEED_POSTS)), chats: JSON.parse(JSON.stringify(CHATS)), liked:{}, myNick:{}, sms: JSON.parse(JSON.stringify(SMS)) };
 function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
 function esc(s){ return String(s).replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
 function toast(m){ const t=$("toast"); t.textContent=m; t.classList.add("on"); setTimeout(()=>t.classList.remove("on"),1500); }
@@ -180,18 +263,26 @@ function uid(){ return "x"+Date.now().toString(36)+Math.random().toString(36).sl
 function nowLabel(){ return "방금"; }
 
 /* ---- 화면 전환 ---- */
-const lightViews = ["home"];
+const lightViews = ["home","galview"];
 function show(id){
   document.querySelectorAll(".view").forEach(v=>v.classList.remove("on"));
   $(id).classList.add("on");
-  const st=$("status"); st.classList.toggle("light", lightViews.includes(id));
-  st.style.background = id==="room" ? "#b2c7da" : (id==="home" ? "transparent" : "#fff");
+  const st=$("status"); st.classList.toggle("light", lightViews.includes(id)); $("nav").classList.toggle("dark", lightViews.includes(id));
+  st.style.background = id==="room" ? "#b2c7da" : id==="galview" ? "#000" : (id==="home" ? "transparent" : "#fff");
   st.style.position = id==="home" ? "absolute" : "relative"; st.style.width="100%";
 }
 function goHome(){ show("home"); }
+/* 내비게이션 바의 뒤로가기: 현재 화면 -> 상위 화면 */
+const BACK = { comm:"home", talk:"home", insta:"home", gallery:"home", smsl:"home", write:"comm", detail:"comm", room:"talk", galview:"gallery", smst:"smsl" };
+function goBack(){
+  const cur=document.querySelector(".view.on").id, up=BACK[cur];
+  if(!up) return;                       // 홈 화면에서는 동작 없음
+  show(up);
+  if(up==="comm") renderFeed(); if(up==="talk") talkTab(curTab); if(up==="smsl") renderSmsList();
+}
 document.querySelectorAll("[data-open]").forEach(a=>a.onclick=()=>{
   const id=a.dataset.open; show(id);
-  if(id==="comm") renderFeed(); if(id==="talk") talkTab(curTab);
+  if(id==="comm") renderFeed(); if(id==="talk") talkTab(curTab); if(id==="insta") renderInsta(); if(id==="gallery") renderGallery(); if(id==="smsl") renderSmsList();
 });
 
 /* ---- 시계 ---- */
@@ -220,10 +311,13 @@ function toggleLike(id){
   save(); $("detail").classList.contains("on") ? renderDetail() : renderFeed();
 }
 function countC(p){ return p.comments.reduce((a,c)=>a+1+(c.replies||[]).length,0); }
+let curBoard="free";
 function renderFeed(){
   const f=$("feed");
-  if(!S.posts.length){ f.innerHTML='<div class="empty">첫 글을 남겨보세요</div>'; return; }
-  f.innerHTML=S.posts.map(p=>`
+  $("btabs").innerHTML=BOARDS.map(b=>`<div class="${b.id===curBoard?'on':''}" onclick="curBoard='${b.id}';renderFeed()">${b.name}</div>`).join("");
+  const list=S.posts.filter(p=>p.board===curBoard);
+  if(!list.length){ f.innerHTML='<div class="empty">첫 글을 남겨보세요</div>'; return; }
+  f.innerHTML=list.map(p=>`
     <div class="post" onclick="openPost('${p.id}')">
       <div><span class="nick">${esc(p.nick)}</span><span class="time">${esc(p.time)}</span></div>
       <div class="txt">${esc(p.text)}</div>
@@ -233,7 +327,8 @@ function renderFeed(){
 function openWrite(){ $("wtxt").value=""; show("write"); $("wtxt").focus(); }
 function submitPost(){
   const t=$("wtxt").value.trim(); if(!t){ toast("내용을 입력해주세요"); return; }
-  S.posts.unshift({ id:uid(), nick:randNick(), text:t, likes:0, time:nowLabel(), comments:[] });
+  const id=uid(), nick=randNick(); S.myNick[id]=nick;
+  S.posts.unshift({ id, board:curBoard, nick, text:t, likes:0, time:nowLabel(), comments:[] });
   save(); show("comm"); renderFeed(); $("feed").scrollTop=0;
 }
 function openPost(id){ curPost=id; replyTarget=null; setReply(null); show("detail"); renderDetail(); }
@@ -252,7 +347,7 @@ function renderDetail(){
 }
 function cmHtml(c,isRe,pid){
   return `<div class="cm ${isRe?'re':''}">
-    <div>${isRe?'↳ ':''}<span class="nick">${esc(c.nick)}</span><span class="time">${esc(c.time)}</span></div>
+    <div>${isRe?'↳ ':''}<span class="nick">${esc(c.nick)}${isOP(c.nick)?' <small style="color:#3b6cff">글쓴이</small>':''}${S.myNick[curPost]===c.nick?' <small style="color:#999">(나)</small>':''}</span><span class="time">${esc(c.time)}</span></div>
     <div class="txt">${esc(c.text)}</div>
     <div class="act">${likeBtn(c.id,c.likes)}${isRe?'':`<button class="lk" onclick="setReply('${c.id}')">답글</button>`}</div></div>`;
 }
@@ -261,10 +356,19 @@ function setReply(cid){
   if(cid){ const c=findItem(cid); $("rtxt").textContent=c.nick+" 님에게 답글 작성 중"; box.style.display="flex"; $("cin").focus(); }
   else box.style.display="none";
 }
+/* 한 글 안에서 내 닉네임은 항상 같고, 다른 사람과 겹치지 않음 */
+function nickFor(p){
+  if(S.myNick[p.id]) return S.myNick[p.id];
+  const used=new Set([p.nick]);
+  p.comments.forEach(c=>{ used.add(c.nick); (c.replies||[]).forEach(r=>used.add(r.nick)); });
+  let n; do{ n=randNick(); }while(used.has(n));
+  return S.myNick[p.id]=n;
+}
+function isOP(n){ const p=S.posts.find(x=>x.id===curPost); return p&&p.nick===n; }
 function submitComment(){
   const t=$("cin").value.trim(); if(!t) return;
   const p=S.posts.find(x=>x.id===curPost);
-  const item={ id:uid(), nick:randNick(), text:t, likes:0, time:nowLabel() };
+  const item={ id:uid(), nick:nickFor(p), text:t, likes:0, time:nowLabel() };
   if(replyTarget){ const c=p.comments.find(x=>x.id===replyTarget); (c.replies=c.replies||[]).push(item); }
   else { item.replies=[]; p.comments.push(item); }
   $("cin").value=""; setReply(null); save(); renderDetail();
@@ -312,6 +416,46 @@ function sendMsg(){
   const d=new Date(), h=d.getHours();
   curRoom.msgs.push({ from:"me", text:t, time:(h<12?"오전 ":"오후 ")+(h%12||12)+":"+String(d.getMinutes()).padStart(2,"0") });
   i.value=""; save(); renderMsgs();
+}
+/* ---- 공용 ---- */
+function tm(){ const d=new Date(),h=d.getHours(); return (h<12?"오전 ":"오후 ")+(h%12||12)+":"+String(d.getMinutes()).padStart(2,"0"); }
+const pic=o=>o.img?`background-image:url('${o.img}')`:`background:${o.bg}`;
+
+/* ---- 인스타그램 ---- */
+function renderInsta(){
+  let h='<div class="stories">'+INSTA.map(p=>`<div class="story"><div class="rg"><div>${p.emoji}</div></div>${esc(p.user.slice(0,9))}</div>`).join("")+'</div>';
+  h+=INSTA.map(p=>{ const on=S.liked[p.id]; return `<div class="igp">
+    <div class="top"><div class="av" style="width:32px;height:32px;border-radius:50%;font-size:16px">${p.emoji}</div>${esc(p.user)}</div>
+    <div class="pic" style="${pic(p)}">${p.img?'':p.emoji}</div>
+    <div class="acts"><button class="lk ${on?'on':''}" style="font-size:22px" onclick="igLike('${p.id}')">${on?'❤️':'🤍'}</button> <span style="font-weight:600;font-size:13px">좋아요 ${p.likes+(on?1:0)}개</span></div>
+    <div class="cap"><b>${esc(p.user)}</b> ${esc(p.caption)}${p.comments.map(c=>`<div style="color:#555"><b>${esc(c.user)}</b> ${esc(c.text)}</div>`).join("")}<div class="time" style="margin:4px 0 0">${esc(p.time)}</div></div></div>`; }).join("");
+  $("igbody").innerHTML=h;
+}
+function igLike(id){ if(S.liked[id]) delete S.liked[id]; else S.liked[id]=1; save(); const b=$("igbody"),y=b.scrollTop; renderInsta(); b.scrollTop=y; }
+
+/* ---- 갤러리 ---- */
+function renderGallery(){ $("gbody").innerHTML=GALLERY.map(g=>`<div class="pic" style="${pic(g)}" onclick="openPhoto('${g.id}')">${g.img?'':g.emoji}</div>`).join(""); }
+function openPhoto(id){
+  const g=GALLERY.find(x=>x.id===id); $("gvt").textContent=g.title+" · "+g.date;
+  $("gvbody").innerHTML=`<div class="pic" style="${pic(g)};font-size:140px">${g.img?'':g.emoji}</div>`; show("galview");
+}
+
+/* ---- 메시지(문자) ---- */
+let curSms=null;
+function renderSmsList(){
+  $("slbody").innerHTML=S.sms.map(c=>{ const l=c.msgs[c.msgs.length-1]||{text:"",time:""};
+    return `<div class="ppl" onclick="openSms('${c.id}')"><div class="av">${c.emoji}</div><div><div class="n">${esc(c.name)}</div><div class="s">${esc(l.text)}</div></div><div class="e">${esc(l.time)}</div></div>`; }).join("");
+}
+function openSms(id){ curSms=S.sms.find(c=>c.id===id); $("stname").textContent=curSms.name; show("smst"); renderSmsMsgs(); }
+function renderSmsMsgs(){
+  let h='<div class="day" style="background:#bbb">오늘</div>';
+  curSms.msgs.forEach(m=>{ const me=m.from==="me";
+    h+=`<div class="m ${me?'me':''}"><div class="bub">${esc(m.text)}</div><span class="tm">${esc(m.time)}</span></div>`; });
+  const b=$("stmsgs"); b.innerHTML=h; b.scrollTop=b.scrollHeight;
+}
+function sendSms(){
+  const i=$("sin"), t=i.value.trim(); if(!t) return;
+  curSms.msgs.push({ from:"me", text:t, time:tm() }); i.value=""; save(); renderSmsMsgs();
 }
 </script>
 </body>
