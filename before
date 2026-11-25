@@ -3,13 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Hello, S-Class Hunter!</title>
+<title>Hello, S-Class Student!</title>
 <style>
 :root{--bg:#0b0b0f;--yellow:#fee500;--blue:#3b6cff}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%}
 body{background:var(--bg);font-family:-apple-system,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",sans-serif;display:flex;align-items:center;justify-content:center;overflow:hidden}
-/* ===== Galaxy frame ===== */
+
+  /* ===== Galaxy frame ===== */
 .device{position:relative;width:min(400px,100vw);height:min(860px,100vh);background:#111;border-radius:44px;padding:10px;box-shadow:0 0 0 2px #2b2b33,0 0 0 4px #0a0a0d,0 30px 80px rgba(0,0,0,.6)}
 .device::before,.device::after{content:"";position:absolute;right:-5px;width:4px;border-radius:2px;background:#2b2b33}
 .device::before{top:150px;height:50px}.device::after{top:230px;height:90px}
@@ -32,6 +33,7 @@ body{background:var(--bg);font-family:-apple-system,"Apple SD Gothic Neo","Noto 
 .view{position:absolute;inset:0;display:none;flex-direction:column;padding-bottom:44px}
 .view.on{display:flex}
 .body{flex:1;overflow-y:auto}
+  
 /* ===== Home ===== */
 #home{background:linear-gradient(160deg,#1c2b5a,#5b3a8c 55%,#c0577a)}
 .clock{color:#fff;text-align:center;margin-top:50px}
@@ -63,6 +65,7 @@ body{background:var(--bg);font-family:-apple-system,"Apple SD Gothic Neo","Noto 
 .write{padding:14px;background:#fff;flex:1;display:flex;flex-direction:column;gap:10px}
 .write textarea{flex:1;border:0;outline:none;font:inherit;font-size:16px;resize:none}
 .write .note{font-size:12px;color:#999}
+  
 /* ===== 헌톡 ===== */
 #talk{background:#fff}
 .tabs{flex:none;display:flex;border-top:1px solid #eee;background:#fff;padding-bottom:4px}
@@ -162,6 +165,7 @@ body{background:var(--bg);font-family:-apple-system,"Apple SD Gothic Neo","Noto 
   <div class="hdr"><span class="igh">Instagram</span><button onclick="toast('DM은 사용할 수 없습니다')">✈️</button></div>
   <div class="body" id="igbody"></div>
 </section>
+  
 <!-- 갤러리 -->
 <section class="view" id="gallery" style="top:34px;background:#fff">
   <div class="hdr"><span>갤러리</span><button onclick="toast('검색은 사용할 수 없습니다')">🔍</button></div>
@@ -171,6 +175,7 @@ body{background:var(--bg);font-family:-apple-system,"Apple SD Gothic Neo","Noto 
   <div class="hdr" style="background:#000;color:#fff;border:0"><button onclick="show('gallery')" style="color:#fff">←</button><span id="gvt" style="font-size:15px"></span><span style="width:24px"></span></div>
   <div class="body" id="gvbody" style="display:flex;align-items:center"></div>
 </section>
+  
 <!-- 메시지(문자) -->
 <section class="view" id="smsl" style="top:34px;background:#fff">
   <div class="hdr"><span>메시지</span><button onclick="toast('검색은 사용할 수 없습니다')">🔍</button></div>
@@ -272,6 +277,7 @@ function show(id){
   st.style.position = id==="home" ? "absolute" : "relative"; st.style.width="100%";
 }
 function goHome(){ show("home"); }
+  
 /* 내비게이션 바의 뒤로가기: 현재 화면 -> 상위 화면 */
 const BACK = { comm:"home", talk:"home", insta:"home", gallery:"home", smsl:"home", write:"comm", detail:"comm", room:"talk", galview:"gallery", smst:"smsl" };
 function goBack(){
@@ -356,6 +362,7 @@ function setReply(cid){
   if(cid){ const c=findItem(cid); $("rtxt").textContent=c.nick+" 님에게 답글 작성 중"; box.style.display="flex"; $("cin").focus(); }
   else box.style.display="none";
 }
+
 /* 한 글 안에서 내 닉네임은 항상 같고, 다른 사람과 겹치지 않음 */
 function nickFor(p){
   if(S.myNick[p.id]) return S.myNick[p.id];
@@ -417,6 +424,7 @@ function sendMsg(){
   curRoom.msgs.push({ from:"me", text:t, time:(h<12?"오전 ":"오후 ")+(h%12||12)+":"+String(d.getMinutes()).padStart(2,"0") });
   i.value=""; save(); renderMsgs();
 }
+
 /* ---- 공용 ---- */
 function tm(){ const d=new Date(),h=d.getHours(); return (h<12?"오전 ":"오후 ")+(h%12||12)+":"+String(d.getMinutes()).padStart(2,"0"); }
 const pic=o=>o.img?`background-image:url('${o.img}')`:`background:${o.bg}`;
