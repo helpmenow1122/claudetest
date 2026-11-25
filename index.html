@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Galaxy</title>
+<style>
+:root{--bg:#0b0b0f;--yellow:#fee500;--blue:#3b6cff}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{background:var(--bg);font-family:-apple-system,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",sans-serif;display:flex;align-items:center;justify-content:center;overflow:hidden}
+/* ===== Galaxy frame ===== */
+.device{position:relative;width:min(400px,100vw);height:min(860px,100vh);background:#111;border-radius:44px;padding:10px;box-shadow:0 0 0 2px #2b2b33,0 0 0 4px #0a0a0d,0 30px 80px rgba(0,0,0,.6)}
+.device::before,.device::after{content:"";position:absolute;right:-5px;width:4px;border-radius:2px;background:#2b2b33}
+.device::before{top:150px;height:50px}.device::after{top:230px;height:90px}
+.screen{position:relative;width:100%;height:100%;background:#fff;border-radius:34px;overflow:hidden;display:flex;flex-direction:column}
+.cam{position:absolute;top:11px;left:50%;transform:translateX(-50%);width:13px;height:13px;border-radius:50%;background:#000;z-index:100;box-shadow:0 0 0 2px #1a1a1f}
+@media(max-width:430px){.device{width:100vw;height:100vh;border-radius:0;padding:0;box-shadow:none}.screen{border-radius:0}.device::before,.device::after{display:none}}
+.status{height:34px;flex:none;display:flex;justify-content:space-between;align-items:center;padding:6px 26px 0;font-size:13px;font-weight:600;z-index:90;color:#111}
+.status.light{color:#fff}
+.status .r{display:flex;gap:6px;align-items:center;font-size:11px}
+.bat{display:inline-block;width:20px;height:10px;border:1.5px solid currentColor;border-radius:3px;position:relative}
+.bat::after{content:"";position:absolute;inset:1px;width:75%;background:currentColor;border-radius:1px}
+.navbar{height:30px;flex:none;display:flex;justify-content:center;align-items:center;gap:60px;background:inherit}
+.home-ind{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:110px;height:4px;border-radius:2px;background:#888;z-index:100;cursor:pointer}
+.view{position:absolute;inset:0;display:none;flex-direction:column;padding-bottom:20px}
+.view.on{display:flex}
+.body{flex:1;overflow-y:auto}
+/* ===== Home ===== */
+#home{background:linear-gradient(160deg,#1c2b5a,#5b3a8c 55%,#c0577a)}
+.clock{color:#fff;text-align:center;margin-top:50px}
+.clock .t{font-size:64px;font-weight:300}.clock .d{font-size:15px;opacity:.85;margin-top:4px}
+.apps{display:grid;grid-template-columns:repeat(4,1fr);gap:22px 8px;padding:50px 22px;margin-top:auto}
+.app{display:flex;flex-direction:column;align-items:center;gap:6px;color:#fff;font-size:12px;cursor:pointer}
+.ico{width:58px;height:58px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:28px;box-shadow:0 4px 10px rgba(0,0,0,.25)}
+.dock{height:90px}
+/* ===== Community ===== */
+#comm{background:#f4f5f7}
+.hdr{height:52px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:#fff;border-bottom:1px solid #eee;font-weight:700;font-size:18px}
+.hdr button{background:none;border:0;font-size:20px;cursor:pointer;color:#222}
+.post{background:#fff;margin-bottom:8px;padding:14px 16px;cursor:pointer}
+.nick{font-weight:700;font-size:14px;color:#2a2a2a}.time{font-size:11px;color:#999;margin-left:6px;font-weight:400}
+.post .txt{margin:8px 0;font-size:15px;line-height:1.5;white-space:pre-wrap;word-break:break-all}
+.meta{display:flex;gap:14px;font-size:13px;color:#777}
+.lk{background:none;border:0;cursor:pointer;font-size:13px;color:#777;display:inline-flex;align-items:center;gap:3px}
+.lk.on{color:#ff3b5c;font-weight:700}
+.cm{padding:12px 16px;background:#fff;border-bottom:1px solid #f0f0f0}
+.cm.re{padding-left:40px;background:#fafafa}
+.cm .txt{font-size:14px;margin:5px 0;line-height:1.45;white-space:pre-wrap;word-break:break-all}
+.cm .act{display:flex;gap:12px}
+.inp{flex:none;display:flex;gap:8px;padding:8px 12px;background:#fff;border-top:1px solid #eee;align-items:center}
+.inp input,.inp textarea{flex:1;border:0;background:#f0f1f3;border-radius:18px;padding:10px 14px;font:inherit;font-size:14px;outline:none;resize:none}
+.inp button{border:0;background:var(--blue);color:#fff;border-radius:16px;padding:9px 14px;font-weight:700;cursor:pointer;font-size:13px}
+.replyto{font-size:12px;color:var(--blue);padding:6px 16px;background:#eef2ff;display:none;justify-content:space-between}
+.empty{text-align:center;color:#aaa;padding:60px 0;font-size:14px}
+.fab{position:absolute;right:18px;bottom:44px;width:52px;height:52px;border-radius:50%;background:var(--blue);color:#fff;font-size:26px;border:0;box-shadow:0 4px 12px rgba(59,108,255,.5);cursor:pointer}
+.write{padding:14px;background:#fff;flex:1;display:flex;flex-direction:column;gap:10px}
+.write textarea{flex:1;border:0;outline:none;font:inherit;font-size:16px;resize:none}
+.write .note{font-size:12px;color:#999}
+/* ===== 헌톡 ===== */
+#talk{background:#fff}
+.tabs{flex:none;display:flex;border-top:1px solid #eee;background:#fff;padding-bottom:4px}
+.tabs div{flex:1;text-align:center;padding:10px 0;font-size:12px;color:#aaa;cursor:pointer}
+.tabs div.on{color:#222;font-weight:700}.tabs div span{display:block;font-size:20px}
+.ppl{display:flex;align-items:center;gap:12px;padding:10px 16px;cursor:pointer}
+.av{width:46px;height:46px;border-radius:17px;background:#ddd;display:flex;align-items:center;justify-content:center;font-size:22px;flex:none}
+.ppl .n{font-size:15px;font-weight:600}.ppl .s{font-size:12.5px;color:#888;margin-top:2px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;max-width:220px}
+.ppl .e{margin-left:auto;text-align:right;font-size:11px;color:#aaa}
+.badge{display:inline-block;background:#ff4b3a;color:#fff;border-radius:10px;font-size:11px;padding:1px 7px;margin-top:4px}
+.sec{font-size:12px;color:#999;padding:10px 16px 4px}
+#room{background:#b2c7da}
+.rh{background:#b2c7da;height:52px;flex:none;display:flex;align-items:center;gap:10px;padding:0 14px;font-weight:700;font-size:17px}
+.rh button{background:none;border:0;font-size:22px;cursor:pointer}
+.msgs{flex:1;overflow-y:auto;padding:8px 12px;display:flex;flex-direction:column;gap:8px}
+.day{align-self:center;background:rgba(0,0,0,.18);color:#fff;font-size:11px;padding:4px 12px;border-radius:12px;margin:6px 0}
+.m{display:flex;gap:8px;align-items:flex-end;max-width:82%}
+.m.me{align-self:flex-end;flex-direction:row-reverse}
+.m .who{font-size:12px;color:#333;margin-bottom:3px}
+.bub{background:#fff;padding:8px 11px;border-radius:4px 14px 14px 14px;font-size:14px;line-height:1.4;white-space:pre-wrap;word-break:break-all}
+.me .bub{background:var(--yellow);border-radius:14px 4px 14px 14px}
+.m .tm{font-size:10px;color:#506070;flex:none}
+.m .av{width:38px;height:38px;border-radius:14px;font-size:18px;align-self:flex-start}
+.rin{flex:none;display:flex;gap:8px;padding:8px 10px 10px;background:#fff;align-items:center}
+.rin input{flex:1;border:0;background:#f2f2f2;border-radius:18px;padding:10px 14px;font:inherit;font-size:14px;outline:none}
+.rin button{border:0;background:var(--yellow);border-radius:16px;padding:9px 13px;font-weight:700;cursor:pointer}
+.toast{position:absolute;bottom:70px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.8);color:#fff;font-size:13px;padding:8px 16px;border-radius:18px;opacity:0;transition:.3s;pointer-events:none;z-index:200}
+.toast.on{opacity:1}
+</style>
+</head>
+<body>
+<div class="device"><div class="screen" id="screen">
+<div class="cam"></div>
+<div class="status light" id="status"><span id="stime">3:26</span><span class="r"><span>5G</span><span>▂▄▆</span><span class="bat"></span></span></div>
+
+<!-- HOME -->
+<section class="view on" id="home" style="top:34px">
+  <div class="clock"><div class="t" id="ct">3:26</div><div class="d" id="cd"></div></div>
+  <div class="apps">
+    <div class="app" data-open="comm"><div class="ico" style="background:#fff">💬</div>커뮤니티</div>
+    <div class="app" data-open="talk"><div class="ico" style="background:var(--yellow)">🗨️</div>헌톡</div>
+    <div class="app" onclick="toast('이벤트와 관련 없는 앱입니다')"><div class="ico" style="background:#34c759">📞</div>전화</div>
+    <div class="app" onclick="toast('이벤트와 관련 없는 앱입니다')"><div class="ico" style="background:#5ac8fa">🌐</div>인터넷</div>
+  </div>
+  <div class="dock"></div>
+</section>
+
+<!-- COMMUNITY -->
+<section class="view" id="comm" style="top:34px">
+  <div class="hdr"><span>익명 커뮤니티</span><button onclick="openWrite()" title="글쓰기">✏️</button></div>
+  <div class="body" id="feed"></div>
+  <button class="fab" onclick="openWrite()">+</button>
+</section>
+<section class="view" id="write" style="top:34px;background:#fff">
+  <div class="hdr"><button onclick="show('comm')">←</button><span>글쓰기</span><button onclick="submitPost()" style="font-size:15px;color:var(--blue);font-weight:700">등록</button></div>
+  <div class="write"><textarea id="wtxt" placeholder="내용을 입력하세요. 닉네임은 자동으로 부여됩니다."></textarea><div class="note">🔒 등록 시 S000~S999 중 랜덤 닉네임이 부여됩니다.</div></div>
+</section>
+<section class="view" id="detail" style="top:34px;background:#f4f5f7">
+  <div class="hdr"><button onclick="show('comm');renderFeed()">←</button><span>게시글</span><span style="width:24px"></span></div>
+  <div class="body" id="dbody"></div>
+  <div class="replyto" id="rto"><span id="rtxt"></span><button onclick="setReply(null)" style="background:none;border:0;color:var(--blue)">취소</button></div>
+  <div class="inp"><input id="cin" placeholder="댓글을 입력하세요" onkeydown="if(event.key==='Enter')submitComment()"><button onclick="submitComment()">등록</button></div>
+</section>
+
+<!-- 헌톡 -->
+<section class="view" id="talk" style="top:34px">
+  <div class="hdr"><span id="ttitle">친구</span><button onclick="toast('설정은 사용할 수 없습니다')">⚙️</button></div>
+  <div class="body" id="tbody"></div>
+  <div class="tabs"><div id="tab-f" class="on" onclick="talkTab('f')"><span>👤</span>친구</div><div id="tab-c" onclick="talkTab('c')"><span>💬</span>채팅</div></div>
+</section>
+<section class="view" id="room" style="top:34px">
+  <div class="rh"><button onclick="closeRoom()">←</button><span id="rname"></span></div>
+  <div class="msgs" id="msgs"></div>
+  <div class="rin"><input id="min" placeholder="메시지 입력" onkeydown="if(event.key==='Enter')sendMsg()"><button onclick="sendMsg()">전송</button></div>
+</section>
+
+<div class="toast" id="toast"></div>
+<div class="home-ind" onclick="goHome()"></div>
+</div></div>
+
+<script>
+/* =====================================================
+   ★ 이벤트 운영자 설정 영역 (여기만 수정하세요) ★
+   ===================================================== */
+const ME = { name: "나", emoji: "🙂" };          // 헌톡에서 보이는 내 이름
+
+// 커뮤니티 초기 게시글 (nick을 "S123"처럼 지정, likes는 초기 좋아요 수)
+const SEED_POSTS = [
+  { id:"p1", nick:"S482", text:"요즘 우리 동네 이상한 소문 도는 거 아시는 분?", likes:12, time:"10분 전",
+    comments:[
+      { id:"c1", nick:"S019", text:"저도 들었어요… 밤마다 그 건물에 불이 켜진대요", likes:5, time:"8분 전",
+        replies:[{ id:"r1", nick:"S482", text:"헐 그거 맞아요. 자세히 좀 알려주세요", likes:2, time:"5분 전" }] }
+    ]},
+  { id:"p2", nick:"S731", text:"오늘 점심 뭐 먹을지 추천 좀요", likes:3, time:"1시간 전", comments:[] }
+];
+
+// 헌톡 친구 + 채팅방 (from:"them"=상대, "me"=나)
+const CHATS = [
+  { id:"k1", name:"김헌터", emoji:"🕵️", status:"조용히 해, 들키면 안 돼.", unread:2,
+    msgs:[
+      { from:"them", text:"여기서 얘기하는 건 위험해.", time:"오후 3:12" },
+      { from:"them", text:"조용히 해, 들키면 안 돼.", time:"오후 3:13" }
+    ]},
+  { id:"k2", name:"엄마", emoji:"👩", status:"밥은 먹었니?", unread:0,
+    msgs:[ { from:"them", text:"밥은 먹었니?", time:"오전 11:02" } ]},
+  { id:"k3", name:"단톡방 (5)", emoji:"👥", status:"내일 몇 시에 모여?", unread:5,
+    msgs:[ { from:"them", who:"이도윤", text:"내일 몇 시에 모여?", time:"오후 1:40" } ]}
+];
+/* ===================================================== */
+
+const $ = id => document.getElementById(id);
+const KEY = "galaxy-event-v1";
+let S;
+try { S = JSON.parse(localStorage.getItem(KEY)); } catch(e){}
+if (!S) S = { posts: JSON.parse(JSON.stringify(SEED_POSTS)), chats: JSON.parse(JSON.stringify(CHATS)), liked:{} };
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
+function esc(s){ return String(s).replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+function toast(m){ const t=$("toast"); t.textContent=m; t.classList.add("on"); setTimeout(()=>t.classList.remove("on"),1500); }
+function randNick(){ return "S" + String(Math.floor(Math.random()*1000)).padStart(3,"0"); }
+function uid(){ return "x"+Date.now().toString(36)+Math.random().toString(36).slice(2,6); }
+function nowLabel(){ return "방금"; }
+
+/* ---- 화면 전환 ---- */
+const lightViews = ["home"];
+function show(id){
+  document.querySelectorAll(".view").forEach(v=>v.classList.remove("on"));
+  $(id).classList.add("on");
+  const st=$("status"); st.classList.toggle("light", lightViews.includes(id));
+  st.style.background = id==="room" ? "#b2c7da" : (id==="home" ? "transparent" : "#fff");
+  st.style.position = id==="home" ? "absolute" : "relative"; st.style.width="100%";
+}
+function goHome(){ show("home"); }
+document.querySelectorAll("[data-open]").forEach(a=>a.onclick=()=>{
+  const id=a.dataset.open; show(id);
+  if(id==="comm") renderFeed(); if(id==="talk") talkTab(curTab);
+});
+
+/* ---- 시계 ---- */
+function tick(){
+  const d=new Date(), h=d.getHours()%12||12, m=String(d.getMinutes()).padStart(2,"0");
+  $("stime").textContent=$("ct").textContent=h+":"+m;
+  $("cd").textContent=(d.getMonth()+1)+"월 "+d.getDate()+"일 "+"일월화수목금토"[d.getDay()]+"요일";
+}
+tick(); setInterval(tick,20000); show("home");
+
+/* ---- 커뮤니티 ---- */
+let curPost=null, replyTarget=null;
+function likeBtn(id,n){
+  const on=S.liked[id];
+  return `<button class="lk ${on?'on':''}" onclick="event.stopPropagation();toggleLike('${id}')">${on?'❤️':'🤍'} ${n}</button>`;
+}
+function findItem(id){
+  for(const p of S.posts){
+    if(p.id===id) return p;
+    for(const c of p.comments){ if(c.id===id) return c; for(const r of c.replies||[]) if(r.id===id) return r; }
+  }
+}
+function toggleLike(id){
+  const it=findItem(id); if(!it) return;
+  if(S.liked[id]){ delete S.liked[id]; it.likes--; } else { S.liked[id]=1; it.likes++; }
+  save(); $("detail").classList.contains("on") ? renderDetail() : renderFeed();
+}
+function countC(p){ return p.comments.reduce((a,c)=>a+1+(c.replies||[]).length,0); }
+function renderFeed(){
+  const f=$("feed");
+  if(!S.posts.length){ f.innerHTML='<div class="empty">첫 글을 남겨보세요</div>'; return; }
+  f.innerHTML=S.posts.map(p=>`
+    <div class="post" onclick="openPost('${p.id}')">
+      <div><span class="nick">${esc(p.nick)}</span><span class="time">${esc(p.time)}</span></div>
+      <div class="txt">${esc(p.text)}</div>
+      <div class="meta">${likeBtn(p.id,p.likes)}<span>💬 ${countC(p)}</span></div>
+    </div>`).join("");
+}
+function openWrite(){ $("wtxt").value=""; show("write"); $("wtxt").focus(); }
+function submitPost(){
+  const t=$("wtxt").value.trim(); if(!t){ toast("내용을 입력해주세요"); return; }
+  S.posts.unshift({ id:uid(), nick:randNick(), text:t, likes:0, time:nowLabel(), comments:[] });
+  save(); show("comm"); renderFeed(); $("feed").scrollTop=0;
+}
+function openPost(id){ curPost=id; replyTarget=null; setReply(null); show("detail"); renderDetail(); }
+function renderDetail(){
+  const p=S.posts.find(x=>x.id===curPost); if(!p) return;
+  let h=`<div class="post" style="cursor:default">
+      <div><span class="nick">${esc(p.nick)}</span><span class="time">${esc(p.time)}</span></div>
+      <div class="txt">${esc(p.text)}</div>
+      <div class="meta">${likeBtn(p.id,p.likes)}<span>💬 ${countC(p)}</span></div></div>`;
+  if(!p.comments.length) h+='<div class="empty">첫 댓글을 남겨보세요</div>';
+  p.comments.forEach(c=>{
+    h+=cmHtml(c,false);
+    (c.replies||[]).forEach(r=>h+=cmHtml(r,true,c.id));
+  });
+  const b=$("dbody"), st=b.scrollTop; b.innerHTML=h; b.scrollTop=st;
+}
+function cmHtml(c,isRe,pid){
+  return `<div class="cm ${isRe?'re':''}">
+    <div>${isRe?'↳ ':''}<span class="nick">${esc(c.nick)}</span><span class="time">${esc(c.time)}</span></div>
+    <div class="txt">${esc(c.text)}</div>
+    <div class="act">${likeBtn(c.id,c.likes)}${isRe?'':`<button class="lk" onclick="setReply('${c.id}')">답글</button>`}</div></div>`;
+}
+function setReply(cid){
+  replyTarget=cid; const box=$("rto");
+  if(cid){ const c=findItem(cid); $("rtxt").textContent=c.nick+" 님에게 답글 작성 중"; box.style.display="flex"; $("cin").focus(); }
+  else box.style.display="none";
+}
+function submitComment(){
+  const t=$("cin").value.trim(); if(!t) return;
+  const p=S.posts.find(x=>x.id===curPost);
+  const item={ id:uid(), nick:randNick(), text:t, likes:0, time:nowLabel() };
+  if(replyTarget){ const c=p.comments.find(x=>x.id===replyTarget); (c.replies=c.replies||[]).push(item); }
+  else { item.replies=[]; p.comments.push(item); }
+  $("cin").value=""; setReply(null); save(); renderDetail();
+  const b=$("dbody"); b.scrollTop=b.scrollHeight;
+}
+
+/* ---- 헌톡 ---- */
+let curTab="f", curRoom=null;
+function talkTab(t){
+  curTab=t; $("tab-f").classList.toggle("on",t==="f"); $("tab-c").classList.toggle("on",t==="c");
+  $("ttitle").textContent=t==="f"?"친구":"채팅";
+  let h="";
+  if(t==="f"){
+    h+=`<div class="ppl"><div class="av">${ME.emoji}</div><div><div class="n">${esc(ME.name)}</div></div></div><div class="sec">친구 ${S.chats.filter(c=>!c.name.includes("(")).length}</div>`;
+    S.chats.filter(c=>!c.name.includes("(")).forEach(c=>{
+      h+=`<div class="ppl" onclick="openRoom('${c.id}')"><div class="av">${c.emoji}</div><div><div class="n">${esc(c.name)}</div><div class="s">${esc(c.status)}</div></div></div>`;
+    });
+  } else {
+    S.chats.forEach(c=>{
+      const last=c.msgs[c.msgs.length-1]||{text:"",time:""};
+      h+=`<div class="ppl" onclick="openRoom('${c.id}')"><div class="av">${c.emoji}</div>
+        <div><div class="n">${esc(c.name)}</div><div class="s">${esc(last.text)}</div></div>
+        <div class="e">${esc(last.time)}<br>${c.unread?`<span class="badge">${c.unread}</span>`:""}</div></div>`;
+    });
+  }
+  $("tbody").innerHTML=h;
+}
+function openRoom(id){
+  curRoom=S.chats.find(c=>c.id===id); curRoom.unread=0; save();
+  $("rname").textContent=curRoom.name; show("room"); renderMsgs();
+}
+function closeRoom(){ show("talk"); talkTab(curTab); }
+function renderMsgs(){
+  let h='<div class="day">오늘</div>';
+  curRoom.msgs.forEach(m=>{
+    const me=m.from==="me";
+    h+=`<div class="m ${me?'me':''}">${me?'':`<div class="av">${curRoom.emoji}</div>`}
+      <div>${!me&&m.who?`<div class="who">${esc(m.who)}</div>`:''}<div class="bub">${esc(m.text)}</div></div>
+      <span class="tm">${esc(m.time)}</span></div>`;
+  });
+  const b=$("msgs"); b.innerHTML=h; b.scrollTop=b.scrollHeight;
+}
+function sendMsg(){
+  const i=$("min"), t=i.value.trim(); if(!t) return;
+  const d=new Date(), h=d.getHours();
+  curRoom.msgs.push({ from:"me", text:t, time:(h<12?"오전 ":"오후 ")+(h%12||12)+":"+String(d.getMinutes()).padStart(2,"0") });
+  i.value=""; save(); renderMsgs();
+}
+</script>
+</body>
+</html>
