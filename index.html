@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Galaxy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0b0b0f;--yellow:#fee500;--blue:#3b6cff}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{background:var(--bg);font-family:"Noto Sans KR",sans-serif;display:flex;align-items:center;justify-content:center;overflow:hidden}
+/* ===== Galaxy frame ===== */
+.device{position:relative;width:min(400px,calc(100vw - 16px),calc((100vh - 16px) * 9 / 19.5));width:min(400px,calc(100vw - 16px),calc((100dvh - 16px) * 9 / 19.5));aspect-ratio:9/19.5;background:#111;border-radius:44px;padding:10px;box-shadow:0 0 0 2px #2b2b33,0 0 0 4px #0a0a0d,0 30px 80px rgba(0,0,0,.6)}
+.device::before,.device::after{content:"";position:absolute;right:-5px;width:4px;border-radius:2px;background:#2b2b33}
+.device::before{top:150px;height:50px}.device::after{top:230px;height:90px}
+.screen{position:absolute;inset:10px;background:#fff;border-radius:34px;overflow:hidden;display:flex;flex-direction:column}
+.cam{position:absolute;top:11px;left:50%;transform:translateX(-50%);width:13px;height:13px;border-radius:50%;background:#000;z-index:100;box-shadow:0 0 0 2px #1a1a1f}
+button,input,textarea{font-family:inherit}
+.clamp{display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden}
+.more{display:none;font-size:13px;color:#999;margin:-2px 0 8px}
+.ptitle{font-weight:700;font-size:16px;margin-top:8px}
+.ptitle+.txt{margin-top:4px!important}
+.dbg{position:absolute;inset:0;background:rgba(0,0,0,.4);display:none;z-index:50}
+.drawer{position:absolute;top:0;right:0;bottom:0;width:68%;background:#fff;transform:translateX(100%);transition:transform .25s;z-index:51;padding-top:8px}
+.drawer.on{transform:none}
+.drawer .dh{padding:14px 20px;font-weight:700;font-size:17px;border-bottom:1px solid #eee}
+.drawer .it{padding:15px 20px;font-size:15px;cursor:pointer}
+.drawer .it.on{color:#3b6cff;font-weight:700;background:#f0f4ff}
+.status{height:34px;flex:none;display:flex;justify-content:space-between;align-items:center;padding:6px 26px 0;font-size:13px;font-weight:600;z-index:90;color:#111}
+.status.light{color:#fff}
+.status .r{display:flex;gap:6px;align-items:center;font-size:11px}
+.bat{display:inline-block;width:20px;height:10px;border:1.5px solid currentColor;border-radius:3px;position:relative}
+.bat::after{content:"";position:absolute;inset:1px;width:75%;background:currentColor;border-radius:1px}
+.navbar{height:30px;flex:none;display:flex;justify-content:center;align-items:center;gap:60px;background:inherit}
+.nav{position:absolute;bottom:0;left:0;right:0;height:44px;display:flex;justify-content:center;align-items:center;gap:40px;z-index:100;background:#fff;color:#222}
+.nav.dark{background:transparent;color:#fff}
+.nav button{background:none;border:0;width:56px;height:44px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:inherit}
+.nav i{display:block}
+.nav .rc{width:2px;height:16px;background:currentColor;box-shadow:7px 0 0 currentColor,-7px 0 0 currentColor}
+.nav .hm{width:16px;height:16px;border:2px solid currentColor;border-radius:50%}
+.nav .bk{width:11px;height:11px;border-left:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg);margin-left:4px}
+.view{position:absolute;inset:0;display:none;flex-direction:column;padding-bottom:44px}
+.view.on{display:flex}
+.body{flex:1;overflow-y:auto}
+/* ===== Home ===== */
+#home{background:linear-gradient(160deg,#1c2b5a,#5b3a8c 55%,#c0577a)}
+.clock{color:#fff;text-align:center;margin-top:50px}
+.clock .t{font-size:64px;font-weight:300}.clock .d{font-size:15px;opacity:.85;margin-top:4px}
+.apps{display:grid;grid-template-columns:repeat(4,1fr);gap:22px 8px;padding:30px 22px;margin-top:0}
+.app{display:flex;flex-direction:column;align-items:center;gap:6px;color:#fff;font-size:12px;cursor:pointer}
+.ico{width:58px;height:58px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:28px;box-shadow:0 4px 10px rgba(0,0,0,.25)}
+.dock{height:90px}
+/* ===== Community ===== */
+#comm{background:#f4f5f7}
+.hdr{height:52px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:#fff;border-bottom:1px solid #eee;font-weight:700;font-size:18px}
+.hdr button{background:none;border:0;font-size:20px;cursor:pointer;color:#222}
+.post{background:#fff;margin-bottom:8px;padding:14px 16px;cursor:pointer}
+.nick{font-weight:700;font-size:14px;color:#2a2a2a}.time{font-size:11px;color:#999;margin-left:6px;font-weight:400}
+.post .txt{margin:8px 0;font-size:15px;line-height:1.5;white-space:pre-wrap;word-break:break-all}
+.meta{display:flex;gap:14px;font-size:13px;color:#777}
+.lk{background:none;border:0;cursor:pointer;font-size:13px;color:#777;display:inline-flex;align-items:center;gap:3px}
+.lk.on{color:#ff3b5c;font-weight:700}
+.cm{padding:12px 16px;background:#fff;border-bottom:1px solid #f0f0f0}
+.cm.re{padding-left:40px;background:#fafafa}
+.cm .txt{font-size:14px;margin:5px 0;line-height:1.45;white-space:pre-wrap;word-break:break-all}
+.cm .act{display:flex;gap:12px}
+.inp{flex:none;display:flex;gap:8px;padding:8px 12px;background:#fff;border-top:1px solid #eee;align-items:center}
+.inp input,.inp textarea{flex:1;border:0;background:#f0f1f3;border-radius:18px;padding:10px 14px;font:inherit;font-size:14px;outline:none;resize:none}
+.inp button{border:0;background:var(--blue);color:#fff;border-radius:16px;padding:9px 14px;font-weight:700;cursor:pointer;font-size:13px}
+.replyto{font-size:12px;color:var(--blue);padding:6px 16px;background:#eef2ff;display:none;justify-content:space-between}
+.empty{text-align:center;color:#aaa;padding:60px 0;font-size:14px}
+.fab{position:absolute;right:18px;bottom:60px;width:52px;height:52px;border-radius:50%;background:var(--blue);color:#fff;font-size:26px;border:0;box-shadow:0 4px 12px rgba(59,108,255,.5);cursor:pointer}
+.write{padding:14px;background:#fff;flex:1;display:flex;flex-direction:column;gap:10px}
+.write textarea{flex:1;border:0;outline:none;font:inherit;font-size:16px;resize:none}
+.write .note{font-size:12px;color:#999}
+/* ===== 헌톡 ===== */
+#talk{background:#fff}
+.tabs{flex:none;display:flex;border-top:1px solid #eee;background:#fff;padding-bottom:4px}
+.tabs div{flex:1;text-align:center;padding:10px 0;font-size:12px;color:#aaa;cursor:pointer}
+.tabs div.on{color:#222;font-weight:700}.tabs div span{display:block;font-size:20px}
+.ppl{display:flex;align-items:center;gap:12px;padding:10px 16px;cursor:pointer}
+.av{width:46px;height:46px;border-radius:17px;background:#c3c8d0;color:#fff;display:flex;align-items:center;justify-content:center;font-size:22px;flex:none}
+.ppl .n{font-size:15px;font-weight:600}.ppl .s{font-size:12.5px;color:#888;margin-top:2px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;max-width:220px}
+.ppl .e{margin-left:auto;text-align:right;font-size:11px;color:#aaa}
+.badge{display:inline-block;background:#ff4b3a;color:#fff;border-radius:10px;font-size:11px;padding:1px 7px;margin-top:4px}
+.sec{font-size:12px;color:#999;padding:10px 16px 4px}
+#room{background:#b2c7da}
+.rh{background:#b2c7da;height:52px;flex:none;display:flex;align-items:center;gap:10px;padding:0 14px;font-weight:700;font-size:17px}
+.rh button{background:none;border:0;font-size:22px;cursor:pointer}
+.msgs{flex:1;overflow-y:auto;padding:8px 12px;display:flex;flex-direction:column;gap:8px}
+.day{align-self:center;background:rgba(0,0,0,.18);color:#fff;font-size:11px;padding:4px 12px;border-radius:12px;margin:6px 0}
+.m{display:flex;gap:8px;align-items:flex-end;max-width:82%}
+.m.me{align-self:flex-end;flex-direction:row-reverse}
+.m .who{font-size:12px;color:#333;margin-bottom:3px}
+.bub{background:#fff;padding:8px 11px;border-radius:4px 14px 14px 14px;font-size:14px;line-height:1.4;white-space:pre-wrap;word-break:break-all}
+.me .bub{background:var(--yellow);border-radius:14px 4px 14px 14px}
+.m .tm{font-size:10px;color:#506070;flex:none}
+.m .av{width:38px;height:38px;border-radius:14px;font-size:18px;align-self:flex-start}
+.rin{flex:none;display:flex;gap:8px;padding:8px 10px 10px;background:#fff;align-items:center}
+.rin input{flex:1;border:0;background:#f2f2f2;border-radius:18px;padding:10px 14px;font:inherit;font-size:14px;outline:none}
+.rin button{border:0;background:var(--yellow);border-radius:16px;padding:9px 13px;font-weight:700;cursor:pointer}
+.toast{position:absolute;bottom:80px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.8);color:#fff;font-size:13px;padding:8px 16px;border-radius:18px;opacity:0;transition:.3s;pointer-events:none;z-index:200}
+.toast.on{opacity:1}
+.btabs{flex:none;display:flex;background:#fff;border-bottom:1px solid #eee;overflow-x:auto}
+.btabs div{flex:none;padding:11px 15px;font-size:14px;color:#888;cursor:pointer;white-space:nowrap}
+.btabs div.on{color:#3b6cff;font-weight:700;border-bottom:2px solid #3b6cff}
+.igh{font-style:italic;font-weight:700;font-size:24px}
+.stories{display:flex;gap:12px;padding:10px 12px;overflow-x:auto;border-bottom:1px solid #eee}
+.story{text-align:center;font-size:11px;flex:none;width:62px}
+.story .rg{width:58px;height:58px;border-radius:50%;padding:3px;background:linear-gradient(45deg,#feda75,#d62976,#4f5bd5);margin-bottom:3px}
+.story .rg div{width:100%;height:100%;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:24px;border:2px solid #fff}
+.igp .top{display:flex;align-items:center;gap:8px;padding:10px 12px;font-weight:600;font-size:14px}
+.igp .acts{padding:8px 12px 4px}.igp .cap{padding:0 12px 14px;font-size:13.5px;line-height:1.45}
+.pic{width:100%;aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:90px;background-size:cover;background-position:center}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}.grid3 .pic{font-size:36px;cursor:pointer}
+.sms .bub{background:#e9ecef}.sms .me .bub{background:var(--blue);color:#fff}
+.sms .rh,.sms .rin{background:#fff}.sms .rin button{background:var(--blue);color:#fff}.sms .tm{color:#999}
+.ytlogo{display:flex;align-items:center;gap:4px;font-weight:700;font-size:18px;letter-spacing:-.5px}
+.ytlogo i{background:#f00;color:#fff;border-radius:6px;font-style:normal;font-size:10px;padding:3px 7px}
+.chips{display:flex;gap:8px;padding:8px 12px;overflow-x:auto;flex:none}
+.chips span{flex:none;background:#f0f0f0;border-radius:8px;padding:6px 12px;font-size:13px}.chips span:first-child{background:#111;color:#fff}
+.yv{margin-bottom:14px;cursor:pointer}
+.thumb{position:relative;width:100%;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;font-size:64px;background-size:cover;background-position:center}
+.dur{position:absolute;right:8px;bottom:8px;background:rgba(0,0,0,.8);color:#fff;font-size:12px;padding:1px 5px;border-radius:4px;font-family:inherit}
+.play{position:absolute;width:56px;height:56px;border-radius:50%;background:rgba(0,0,0,.6);color:#fff;font-size:22px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.yi{display:flex;gap:10px;padding:10px 12px}
+.yi .av{width:36px;height:36px;border-radius:50%;font-size:18px}
+.yi .tt{font-weight:500;font-size:14.5px;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.yi .sub{font-size:12px;color:#606060;margin-top:3px}
+.ywt{padding:10px 14px 4px;font-weight:700;font-size:17px;line-height:1.35}
+.ywm{padding:0 14px;font-size:12px;color:#606060}
+.ych{display:flex;align-items:center;gap:10px;padding:12px 14px}
+.ych b{font-size:14px}
+.sbtn{margin-left:auto;border:0;border-radius:18px;background:#111;color:#fff;padding:8px 14px;font-size:13px;font-weight:500;cursor:pointer}
+.sbtn.on{background:#f0f0f0;color:#111}
+.ywd{margin:6px 14px 20px;background:#f2f2f2;border-radius:12px;padding:10px 12px;font-size:13px;line-height:1.5;white-space:pre-wrap}
+.ico{overflow:hidden;box-shadow:0 3px 8px rgba(0,0,0,.3)}.ico svg{width:100%;height:100%;display:block}
+.etabs div.on{color:#c62917}
+.etfab{background:#c62917;box-shadow:0 4px 12px rgba(198,41,23,.45);font-size:22px}
+.bi{padding:14px 18px;border-bottom:1px solid #f1f1f1;cursor:pointer}
+.bn{font-size:15px;font-weight:700}.bp{font-size:12.5px;color:#888;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bi.off .bn{color:#bbb;font-weight:400}
+.et{padding:14px 16px;border-bottom:1px solid #eee;cursor:pointer}
+.et .ptitle{margin:0 0 4px}.et .txt{font-size:14px;line-height:1.45;color:#444;white-space:pre-wrap;word-break:break-all;margin:0}
+.et .more{margin:2px 0 0}
+.etm{display:flex;gap:8px;font-size:12px;color:#999;margin-top:8px;align-items:center}
+.etm .r{margin-left:auto;display:flex;gap:10px}
+.etm b{display:inline-flex;align-items:center;gap:3px;font-weight:400}
+.up{color:#c62917}.cc{color:#1ba5a5}
+.dp{padding:14px 16px;border-bottom:1px solid #eee}
+.dau{display:flex;gap:10px;align-items:center}
+.pf{width:36px;height:36px;border-radius:50%;background:#eee;display:flex;align-items:center;justify-content:center;font-size:18px;flex:none}
+.pf.s{width:24px;height:24px;font-size:12px}
+.dn{font-weight:700;font-size:14px}.dn small,.ech small{color:#999;font-weight:400;margin-left:4px}.dt{font-size:11.5px;color:#999;margin-top:1px}
+.dtx{font-size:15px;line-height:1.6;white-space:pre-wrap;word-break:break-all}
+.dbt{display:flex;gap:8px;margin-top:12px}
+.dbt button{flex:1;border:1px solid #ddd;background:#fff;border-radius:6px;padding:8px;font-size:13px;color:#555;display:flex;justify-content:center;align-items:center;gap:4px;cursor:pointer;font-family:inherit}
+.dbt button.on{color:#c62917;border-color:#c62917}
+.ec{padding:12px 16px;border-bottom:1px solid #f1f1f1}.ec.re{background:#f6f6f6;padding-left:40px}
+.ech{display:flex;align-items:center;gap:8px;font-size:13px}.ech b{font-weight:700}
+.ech small.op{color:#c62917;font-weight:700}
+.ea{margin-left:auto;display:flex;gap:10px}.ea button{background:none;border:0;color:#999;cursor:pointer;display:flex}.ea button.on{color:#c62917}
+.ect{font-size:14px;line-height:1.5;margin:6px 0 4px;white-space:pre-wrap;word-break:break-all}
+.ecm{font-size:11.5px;color:#999;display:flex;gap:8px;align-items:center}
+.replyto{background:#fdecea;color:#c62917}
+.etinp button{background:none;color:#c62917;font-size:20px;padding:4px 8px}
+.tabs svg{display:block;margin:0 auto 3px}.hdr button svg{display:block}
+.av,.pf{background:#c3c8d0;color:#fff}.av svg,.pf svg,.story .rg div svg{width:62%;height:62%}.story .rg div{background:#c3c8d0;color:#fff}
+.etbar{height:52px;flex:none;display:flex;align-items:center;gap:8px;padding:0 16px;background:#fff;font-weight:700;font-size:17px;color:#222}
+.etbar .rt{margin-left:auto;display:flex;gap:16px}.etbar .rt span,.etbar svg{display:flex;cursor:pointer}
+#blbody{padding:0 12px}
+.card{background:#fff;border-radius:14px;margin-top:10px;overflow:hidden}
+.todo{width:62%;padding:12px 14px;font-size:12px;color:#999;margin-top:12px}.todo .ct{color:#222;font-weight:700;font-size:13px}.todo .cd{margin:2px 0 10px}
+.todo .tb{display:flex;gap:14px}.todo .tb span{display:flex;align-items:center;gap:3px;cursor:pointer}
+.sh{display:flex;align-items:center;margin:24px 4px 0;font-size:16px}.sh .mr{margin-left:auto;font-size:12px;color:#999;display:flex;align-items:center;gap:2px;cursor:pointer}
+.card .bi{display:flex;align-items:center;gap:14px;padding:13px 16px;border:0}
+.card .bn{font-size:13.5px;font-weight:500;width:84px;flex:none}.card .bp{margin:0;flex:1;min-width:0;font-size:13px}
+.nb{font-style:normal;background:#c62917;color:#fff;width:15px;height:15px;border-radius:50%;font-size:9px;display:flex;align-items:center;justify-content:center;flex:none}
+.pcard{padding:14px 16px;cursor:pointer}.pt{display:flex;align-items:center;gap:8px;font-size:13px}.pt .pd{margin-left:auto;font-size:11px;color:#aaa}
+.pc{font-size:14px;line-height:1.45;margin:10px 0 8px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.pb{display:flex;align-items:center;font-size:11.5px;color:#aaa}.pb .r{margin-left:auto;display:flex;gap:10px}.pb b,.hr b{display:inline-flex;align-items:center;gap:3px;font-weight:400;font-size:12px}
+.lec{padding:14px 16px}.stars{color:#f5a623;font-size:13px;letter-spacing:1px;margin-bottom:6px}.lt{font-size:13.5px;line-height:1.45}
+.hr{display:flex;align-items:center;gap:12px;padding:13px 16px;font-size:13.5px;cursor:pointer}
+.hd{font-size:11.5px;color:#aaa;width:46px;flex:none}.hp{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.hr .r{display:flex;gap:8px}
+.etb{display:flex;gap:10px;align-items:flex-start}.etc{flex:1;min-width:0}
+.th{width:64px;height:64px;border-radius:8px;background-size:cover;background-position:center;flex:none}
+.dimg{width:100%;border-radius:8px;margin-top:10px;display:block}
+.lkb{background:none;border:0;color:#c62917;display:inline-flex;align-items:center;gap:3px;font-size:12px;cursor:pointer;font-family:inherit;padding:0}
+.ect .to{color:#c62917;font-weight:500}
+.wtool{flex:none;display:flex;align-items:center;gap:10px;padding:10px 14px;border-top:1px solid #eee}.pbtn{display:flex;align-items:center;gap:6px;font-size:14px;color:#555;cursor:pointer}
+.prev{display:flex;gap:8px;flex-wrap:wrap}.prev div{position:relative;width:72px;height:72px;border-radius:8px;background-size:cover;background-position:center}
+.prev i{position:absolute;top:-6px;right:-6px;width:20px;height:20px;border-radius:50%;background:#333;color:#fff;font-style:normal;font-size:13px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+</style>
+</head>
+<body>
+<div class="device"><div class="screen" id="screen">
+<div class="cam"></div>
+<div class="status light" id="status"><span id="stime">3:26</span><span class="r"><span>5G</span><span>▂▄▆</span><span class="bat"></span></span></div>
+
+<!-- HOME -->
+<section class="view on" id="home" style="top:34px">
+  <div class="apps">
+    <div class="app" data-open="comm"><div class="ico"><svg viewBox="0 0 64 64"><rect width="64" height="64" fill="#c62917"/><path d="M17 29a15 15 0 0 0 30 0" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round"/><circle cx="43" cy="17" r="4.5" fill="#fff"/></svg></div>에브리타임</div>
+    <div class="app" data-open="talk"><div class="ico"><svg viewBox="0 0 64 64"><rect width="64" height="64" fill="#fee500"/><ellipse cx="32" cy="29" rx="21" ry="17" fill="#3a1d1d"/><path d="M20 42l-4 10 12-7z" fill="#3a1d1d"/><text x="32" y="33" text-anchor="middle" font-size="12" font-weight="700" fill="#fee500" font-family="Noto Sans KR,sans-serif">TALK</text></svg></div>헌톡</div>
+    <div class="app" data-open="insta"><div class="ico"><svg viewBox="0 0 64 64"><defs><linearGradient id="ig" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#fdc468"/><stop offset=".35" stop-color="#fa7e1e"/><stop offset=".6" stop-color="#d62976"/><stop offset=".85" stop-color="#962fbf"/><stop offset="1" stop-color="#4f5bd5"/></linearGradient></defs><rect width="64" height="64" fill="url(#ig)"/><rect x="16" y="16" width="32" height="32" rx="9" fill="none" stroke="#fff" stroke-width="3.5"/><circle cx="32" cy="32" r="8" fill="none" stroke="#fff" stroke-width="3.5"/><circle cx="42" cy="22" r="2.2" fill="#fff"/></svg></div>Instagram</div>
+    <div class="app" data-open="gallery"><div class="ico"><svg viewBox="0 0 64 64"><rect width="64" height="64" fill="#fff"/><g transform="translate(32 32)"><ellipse rx="7" ry="17" fill="#ff5c8a" opacity=".85"/><ellipse rx="7" ry="17" fill="#ffb300" opacity=".85" transform="rotate(60)"/><ellipse rx="7" ry="17" fill="#4aa8ff" opacity=".85" transform="rotate(120)"/></g></svg></div>갤러리</div>
+    <div class="app" data-open="smsl"><div class="ico"><svg viewBox="0 0 64 64"><rect width="64" height="64" fill="#2f7cf6"/><path d="M32 14c-10 0-18 6.7-18 15 0 4.6 2.5 8.7 6.4 11.4L18 50l10-5c1.3.2 2.6.3 4 .3 10 0 18-6.7 18-15s-8-15-18-15z" fill="#fff"/><circle cx="24" cy="30" r="2.4" fill="#2f7cf6"/><circle cx="32" cy="30" r="2.4" fill="#2f7cf6"/><circle cx="40" cy="30" r="2.4" fill="#2f7cf6"/></svg></div>메시지</div>
+    <div class="app" data-open="yt"><div class="ico"><svg viewBox="0 0 64 64"><rect width="64" height="64" fill="#fff"/><rect x="8" y="16" width="48" height="32" rx="10" fill="#f00"/><path d="M27 24l14 8-14 8z" fill="#fff"/></svg></div>YouTube</div>
+    <div class="app" onclick="openLink('ridi')"><div class="ico"><svg viewBox="0 0 64 64"><rect width="64" height="64" fill="#1e9eff"/><text x="32" y="38" text-anchor="middle" font-size="17" font-weight="700" fill="#fff" font-family="Noto Sans KR,sans-serif" letter-spacing="-.5">RIDI</text></svg></div>리디북스</div>
+    <div class="app" onclick="toast('이벤트와 관련 없는 앱입니다')"><div class="ico"><svg viewBox="0 0 64 64"><rect width="64" height="64" fill="#2fbf5a"/><g transform="translate(14 14) scale(1.5)"><path fill="#fff" d="M20 15.5c-1.25 0-2.45-.2-3.57-.57a1 1 0 0 0-1.02.24l-2.2 2.2a15.05 15.05 0 0 1-6.59-6.59l2.2-2.21a.98.98 0 0 0 .25-1A11.4 11.4 0 0 1 8.5 4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1c0 9.39 7.61 17 17 17a1 1 0 0 0 1-1v-3.5a1 1 0 0 0-1-1z"/></g></svg></div>전화</div>
+    <div class="app" onclick="toast('이벤트와 관련 없는 앱입니다')"><div class="ico"><svg viewBox="0 0 64 64"><rect width="64" height="64" fill="#7c4dff"/><circle cx="32" cy="32" r="17" fill="none" stroke="#fff" stroke-width="3.5"/><ellipse cx="32" cy="32" rx="7" ry="17" fill="none" stroke="#fff" stroke-width="3"/><path d="M15 32h34" stroke="#fff" stroke-width="3"/></svg></div>인터넷</div>
+  </div>
+  <div class="dock"></div>
+</section>
+
+<!-- COMMUNITY (에브리타임 UI) -->
+<section class="view" id="boards" style="top:34px;background:#f4f4f6">
+  <div class="etbar"><svg viewBox="0 0 24 24" width="24" height="24"><path d="M5 10a7 7 0 0 0 14 0" fill="none" stroke="#c62917" stroke-width="3" stroke-linecap="round"/><circle cx="17.5" cy="5" r="2" fill="#c62917"/></svg><span id="school">에브리대학교</span><span class="rt"><span onclick="toast('사용할 수 없습니다')"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg></span><span onclick="toast('사용할 수 없습니다')"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9a6 6 0 0 1 12 0c0 6 2.5 7.5 2.5 7.5h-17S6 15 6 9z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg></span><span onclick="toast('사용할 수 없습니다')"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></span></span></div>
+  <div class="body" id="blbody"></div>
+  <div class="tabs etabs"><div class="on"><span><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11l8-7 8 7v9H4z"/><path d="M10 20v-6h4v6"/></svg></span>홈</div><div onclick="toast('사용할 수 없습니다')"><span><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5.5" width="16" height="14" rx="2"/><path d="M4 10h16M8 3.5v4M16 3.5v4"/></svg></span>시간표</div><div onclick="toast('사용할 수 없습니다')"><span><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 9h8M8 13h8M8 17h5"/></svg></span>게시판</div><div onclick="toast('사용할 수 없습니다')"><span><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 0 1-11.5 7.2L4 20l1-4.2A8 8 0 1 1 20 12z"/></svg></span>채팅</div><div onclick="toast('사용할 수 없습니다')"><span><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14l-1 12H6z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg></span>쇼핑</div></div>
+</section>
+<section class="view" id="comm" style="top:34px;background:#fff">
+  <div class="hdr"><button onclick="goBack()"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button><span id="ctitle" style="font-size:16px">게시판</span><button onclick="toast('사용할 수 없습니다')"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg></button></div>
+  <div class="body" id="feed"></div>
+  <button class="fab etfab" onclick="openWrite()"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l1-4L16.5 4.5a2 2 0 0 1 3 3L8 19l-4 1z"/></svg></button>
+</section>
+<section class="view" id="write" style="top:34px;background:#fff">
+  <div class="hdr"><button onclick="goBack()"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button><span id="wh" style="font-size:16px">글쓰기</span><button onclick="submitPost()" style="font-size:15px;color:#c62917;font-weight:700">완료</button></div>
+  <div class="write"><input id="wtitle" placeholder="제목" maxlength="60" style="border:0;border-bottom:1px solid #eee;outline:none;padding:6px 0 10px;font-size:17px;font-weight:700;display:none"><textarea id="wtxt" placeholder="내용을 입력하세요. 닉네임은 자동으로 부여됩니다."></textarea><div class="prev" id="wprev"></div><div class="note">등록 시 S000~S999 중 랜덤 닉네임이 부여됩니다.</div></div>
+  <div class="wtool"><label class="pbtn"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="14" rx="2"/><circle cx="9" cy="10" r="1.5"/><path d="M4 17l5-4 4 3 3-2 4 3"/></svg> 사진<input type="file" id="wfile" accept="image/*" multiple hidden onchange="addPhotos(this)"></label><span id="wcnt" style="font-size:12px;color:#999">0/3</span></div>
+</section>
+<section class="view" id="detail" style="top:34px;background:#fff">
+  <div class="hdr"><button onclick="goBack()"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button><span id="dtitle" style="font-size:16px"></span><button onclick="toast('사용할 수 없습니다')"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><g fill="currentColor" stroke="none"><circle cx="12" cy="5" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="12" cy="19" r="1.4"/></g></svg></button></div>
+  <div class="body" id="dbody"></div>
+  <div class="replyto" id="rto"><span id="rtxt"></span><button onclick="setReply(null)" style="background:none;border:0;color:#c62917">취소</button></div>
+  <div class="inp etinp"><input id="cin" placeholder="댓글을 입력하세요." onkeydown="if(event.key==='Enter')submitComment()"><button onclick="submitComment()"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 11.5L20.5 4l-4 16-4.5-6.5-8.5-2z"/><path d="M12 13.5L20.5 4"/></svg></button></div>
+</section>
+
+<!-- 헌톡 -->
+<section class="view" id="talk" style="top:34px">
+  <div class="hdr"><span id="ttitle">친구</span><button onclick="toast('설정은 사용할 수 없습니다')"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/></svg></button></div>
+  <div class="body" id="tbody"></div>
+  <div class="tabs"><div id="tab-f" class="on" onclick="talkTab('f')"><span><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4.5 20c0-4 3.5-6 7.5-6s7.5 2 7.5 6"/></svg></span>친구</div><div id="tab-c" onclick="talkTab('c')"><span><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 0 1-11.5 7.2L4 20l1-4.2A8 8 0 1 1 20 12z"/></svg></span>채팅</div></div>
+</section>
+<section class="view" id="room" style="top:34px">
+  <div class="rh"><button onclick="closeRoom()"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button><span id="rname"></span></div>
+  <div class="msgs" id="msgs"></div>
+  <div class="rin"><input id="min" placeholder="메시지 입력" onkeydown="if(event.key==='Enter')sendMsg()"><button onclick="sendMsg()">전송</button></div>
+</section>
+
+<!-- 유튜브 -->
+<section class="view" id="yt" style="top:34px;background:#fff">
+  <div class="hdr"><span class="ytlogo"><i><svg viewBox="0 0 24 24" width="10" height="10" fill="currentColor" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 5l11 7-11 7z"/></svg></i>YouTube</span><button onclick="toast('검색은 사용할 수 없습니다')"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg></button></div>
+  <div class="chips"><span>전체</span><span>음악</span><span>게임</span><span>실시간</span><span>뉴스</span><span>최근 업로드</span></div>
+  <div class="body" id="ytbody"></div>
+  <div class="tabs"><div class="on" onclick="toast('홈')"><span><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11l8-7 8 7v9H4z"/><path d="M10 20v-6h4v6"/></svg></span>홈</div><div onclick="toast('Shorts는 사용할 수 없습니다')"><span><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="3" width="10" height="18" rx="3"/><path d="M11 9.5l3 2.5-3 2.5z"/></svg></span>Shorts</div><div onclick="toast('업로드는 사용할 수 없습니다')"><span><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg></span>만들기</div><div onclick="toast('구독 목록이 비어 있습니다')"><span><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="8" width="16" height="11" rx="2"/><path d="M7 5h10"/></svg></span>구독</div><div onclick="toast('보관함이 비어 있습니다')"><span><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="9" width="16" height="10" rx="2"/><path d="M7 5.5h10"/></svg></span>보관함</div></div>
+</section>
+<section class="view" id="ytw" style="top:34px;background:#fff">
+  <div onclick="goBack()" style="height:36px;flex:none;padding:0 14px;display:flex;align-items:center;font-size:20px;cursor:pointer"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></div>
+  <div id="ytplayer" style="flex:none"></div>
+  <div class="body" id="ytwbody"></div>
+</section>
+<!-- 인스타그램 -->
+<section class="view" id="insta" style="top:34px;background:#fff">
+  <div class="hdr"><span class="igh">Instagram</span><button onclick="toast('DM은 사용할 수 없습니다')"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 11.5L20.5 4l-4 16-4.5-6.5-8.5-2z"/><path d="M12 13.5L20.5 4"/></svg></button></div>
+  <div class="body" id="igbody"></div>
+</section>
+<!-- 갤러리 -->
+<section class="view" id="gallery" style="top:34px;background:#fff">
+  <div class="hdr"><span>갤러리</span><button onclick="toast('검색은 사용할 수 없습니다')"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg></button></div>
+  <div class="body"><div class="grid3" id="gbody"></div></div>
+</section>
+<section class="view" id="galview" style="top:34px;background:#000;color:#fff">
+  <div class="hdr" style="background:#000;color:#fff;border:0"><button onclick="show('gallery')" style="color:#fff"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button><span id="gvt" style="font-size:15px"></span><span style="width:24px"></span></div>
+  <div class="body" id="gvbody" style="display:flex;align-items:center"></div>
+</section>
+<!-- 메시지(문자) -->
+<section class="view" id="smsl" style="top:34px;background:#fff">
+  <div class="hdr"><span>메시지</span><button onclick="toast('검색은 사용할 수 없습니다')"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg></button></div>
+  <div class="body" id="slbody"></div>
+</section>
+<section class="view sms" id="smst" style="top:34px;background:#fff">
+  <div class="rh"><button onclick="show('smsl');renderSmsList()"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button><span id="stname"></span></div>
+  <div class="msgs" id="stmsgs" style="background:#fff"></div>
+  <div class="rin"><input id="sin" placeholder="문자 메시지" onkeydown="if(event.key==='Enter')sendSms()"><button onclick="sendSms()">전송</button></div>
+</section>
+<div class="toast" id="toast"></div>
+<div class="nav dark" id="nav">
+  <button onclick="toast('최근 사용 앱이 없습니다')" aria-label="최근 앱"><i class="rc"></i></button>
+  <button onclick="goHome()" aria-label="홈"><i class="hm"></i></button>
+  <button onclick="goBack()" aria-label="뒤로"><i class="bk"></i></button>
+</div>
+</div></div>
+
+<script>
+/* =====================================================
+   ★ 이벤트 운영자 설정 영역 (여기만 수정하세요) ★
+   ===================================================== */
+const ME = { name: "나" };          // 헌톡에서 보이는 내 이름
+
+// 커뮤니티 초기 게시글 (nick을 "S123"처럼 지정, likes는 초기 좋아요 수)
+const SEED_POSTS = [
+  { id:"p1", board:"free", nick:"S482", title:"요즘 이상한 소문 아시나요?", text:"요즘 우리 동네 이상한 소문 도는 거 아시는 분?", likes:12, time:"10분 전",
+    comments:[
+      { id:"c1", nick:"S019", text:"저도 들었어요… 밤마다 그 건물에 불이 켜진대요", likes:5, time:"8분 전",
+        replies:[{ id:"r1", nick:"S482", text:"헐 그거 맞아요. 자세히 좀 알려주세요", likes:2, time:"5분 전" }] }
+    ]},
+  { id:"p2", board:"free", nick:"S731", title:"점심 추천 부탁해요", text:"오늘 점심 뭐 먹을지 추천 좀요", likes:3, time:"1시간 전", comments:[] },
+  { id:"p3", board:"qna", nick:"S204", text:"수강신청 정정기간 언제까지인가요?", likes:1, time:"2시간 전", comments:[] },
+  { id:"p4", board:"grad", nick:"S655", text:"졸업하고 나서 제일 후회되는 것 하나만 말해줄게요", likes:9, time:"어제", comments:[] },
+  { id:"p5", board:"review", nick:"S318", text:"지난 행사 후기 남깁니다. 생각보다 재밌었어요!\n\n1. 분위기가 좋았어요\n2. 진행이 매끄러웠어요\n3. 다음에도 꼭 참여하고 싶어요\n4. 다만 장소가 조금 좁았어요\n5. 그래도 만족합니다", likes:4, time:"어제", comments:[] },
+  { id:"p6", board:"secret", nick:"S077", text:"여기는 비밀게시판입니다. 아무 말이나 편하게 남겨보세요.", likes:21, time:"2시간 전", comments:[] }
+];
+
+// 외부 링크 (홈 화면의 유튜브/리디북스 앱을 누르면 이동)
+const LINKS = {
+  ridi: "https://ridibooks.com/books/2065016312?_rdt_sid=linked_contents&_rdt_idx=0"
+};
+
+// ===== 에브리타임 설정 =====
+const SCHOOL = "에브리대학교";                                   // 홈 상단에 표시되는 학교 이름
+const COMM_ICON_IMG = "";                                        // 실제 에브리타임 아이콘 파일 경로(예: "images/everytime.png"). 비우면 직접 그린 아이콘
+const DISABLED_BOARDS = ["새내기게시판","정보게시판"];            // 목록에는 보이지만 눌러도 열리지 않는 게시판
+const LECTURES = [                                               // 최근 강의평
+  { course:"미적분과 벡터해석 기초 :", stars:2, text:"시험이 어렵고 과제가 많아요. 그래도 설명은 꼼꼼하세요." },
+  { course:"웹프로그래밍기초 :", stars:4, text:"실습 위주라 따라가기 쉽고 재미있어요." },
+  { course:"식품공학개론 : 윤원근", stars:4, text:"출석 체크 철저하고 시험은 평이한 편입니다." }
+];
+const NEWS = ["2학기 기말고사 시간표 안내","도서관 겨울방학 운영시간 변경","학생식당 메뉴 개편 안내"];   // 교내 소식
+
+// 게시판 목록 (id는 SEED_POSTS의 board 값과 일치해야 함)
+const BOARDS = [
+  { id:"free", name:"자유게시판" }, { id:"secret", name:"비밀게시판" }, { id:"qna", name:"질문게시판" },
+  { id:"grad", name:"졸업생게시판" }, { id:"review", name:"후기게시판" }
+];
+
+// 헌톡 친구 + 채팅방 (from:"them"=상대, "me"=나)
+const CHATS = [
+  { id:"k1", name:"김헌터", status:"조용히 해, 들키면 안 돼.", unread:2,
+    msgs:[
+      { from:"them", text:"여기서 얘기하는 건 위험해.", time:"오후 3:12" },
+      { from:"them", text:"조용히 해, 들키면 안 돼.", time:"오후 3:13" }
+    ]},
+  { id:"k2", name:"엄마", status:"밥은 먹었니?", unread:0,
+    msgs:[ { from:"them", text:"밥은 먹었니?", time:"오전 11:02" } ]},
+  { id:"k3", name:"단톡방 (5)", status:"내일 몇 시에 모여?", unread:5,
+    msgs:[ { from:"them", who:"이도윤", text:"내일 몇 시에 모여?", time:"오후 1:40" } ]}
+];
+
+// 유튜브 영상 목록
+//  img: 썸네일 사진 경로(예: "images/t1.jpg"), 비우면 bg+emoji로 표시
+//  video: 재생할 영상 파일 경로(예: "videos/a.mp4"), 비우면 재생 불가 안내만 표시
+const YOUTUBE = [
+  { id:"y1", title:"[단독] 그날 밤 무슨 일이 있었나", channel:"헌터TV", bg:"linear-gradient(135deg,#667eea,#764ba2)", img:"", video:"",
+    duration:"12:34", views:"조회수 12만회", time:"3일 전", likes:1200, desc:"영상 설명을 여기에 적으세요." },
+  { id:"y2", title:"편의점 신상 라면 10종 먹어봤습니다", channel:"먹방러", bg:"linear-gradient(135deg,#f6d365,#fda085)", img:"", video:"",
+    duration:"8:21", views:"조회수 3.4만회", time:"1주 전", likes:540, desc:"오늘은 편의점 신상 라면을 먹어봅니다." },
+  { id:"y3", title:"밤에 듣기 좋은 로파이 플레이리스트", channel:"Lofi Night", bg:"linear-gradient(135deg,#0f2027,#2c5364)", img:"", video:"",
+    duration:"1:02:10", views:"조회수 88만회", time:"1개월 전", likes:9800, desc:"공부할 때, 쉴 때 듣기 좋은 음악." }
+];
+
+// 인스타그램 게시물: img에 사진 경로(예: "images/a.jpg")를 넣으면 사진이 표시되고, 비우면 bg+emoji로 표시됨
+const INSTA = [
+  { id:"i1", user:"hunter_official", bg:"linear-gradient(135deg,#232526,#414345)", img:"",
+    caption:"오늘 밤, 여기서 만나자 #비밀", likes:128, time:"3시간 전", comments:[{user:"minji_0", text:"어디예요?"}] },
+  { id:"i2", user:"doyun_lee", bg:"linear-gradient(135deg,#f6d365,#fda085)", img:"",
+    caption:"점심은 역시 라면", likes:42, time:"어제", comments:[] }
+];
+
+// 갤러리 사진 (img를 비우면 bg+emoji로 표시됨)
+const GALLERY = [
+  { id:"g1", bg:"#cfd8dc", img:"", title:"IMG_0231", date:"11월 24일" },
+  { id:"g2", bg:"#ffe0b2", img:"", title:"IMG_0232", date:"11월 24일" },
+  { id:"g3", bg:"#9fa8da", img:"", title:"IMG_0233", date:"11월 23일" },
+  { id:"g4", bg:"#c8e6c9", img:"", title:"IMG_0234", date:"11월 22일" }
+];
+
+// 메시지(문자) 앱 대화 (헌톡과 별개)
+const SMS = [
+  { id:"s1", name:"010-1234-5678", msgs:[{ from:"them", text:"[Web발신] 인증번호는 482913 입니다.", time:"오후 2:10" }] },
+  { id:"s2", name:"택배", msgs:[{ from:"them", text:"고객님의 상품이 배송 완료되었습니다.", time:"오전 9:30" }] }
+];
+/* ===================================================== */
+
+const $ = id => document.getElementById(id);
+const I = {"search": "<circle cx=\"11\" cy=\"11\" r=\"6.5\"/><path d=\"M16 16l4.5 4.5\"/>", "bell": "<path d=\"M6 9a6 6 0 0 1 12 0c0 6 2.5 7.5 2.5 7.5h-17S6 15 6 9z\"/><path d=\"M10 20a2 2 0 0 0 4 0\"/>", "menu": "<path d=\"M4 7h16M4 12h16M4 17h16\"/>", "pencil": "<path d=\"M4 20l1-4L16.5 4.5a2 2 0 0 1 3 3L8 19l-4 1z\"/>", "send": "<path d=\"M3.5 11.5L20.5 4l-4 16-4.5-6.5-8.5-2z\"/><path d=\"M12 13.5L20.5 4\"/>", "home": "<path d=\"M4 11l8-7 8 7v9H4z\"/><path d=\"M10 20v-6h4v6\"/>", "calendar": "<rect x=\"4\" y=\"5.5\" width=\"16\" height=\"14\" rx=\"2\"/><path d=\"M4 10h16M8 3.5v4M16 3.5v4\"/>", "board": "<rect x=\"4\" y=\"4\" width=\"16\" height=\"16\" rx=\"2\"/><path d=\"M8 9h8M8 13h8M8 17h5\"/>", "chat": "<path d=\"M20 12a8 8 0 0 1-11.5 7.2L4 20l1-4.2A8 8 0 1 1 20 12z\"/>", "bag": "<path d=\"M5 8h14l-1 12H6z\"/><path d=\"M9 8V6a3 3 0 0 1 6 0v2\"/>", "thumb": "<path d=\"M7 11v9H4v-9h3zM7 11l4-8c1.5 0 2.5 1 2 3l-.7 3H19a2 2 0 0 1 2 2.3l-1.2 6A2 2 0 0 1 17.8 20H7\"/>", "plus": "<path d=\"M12 5v14M5 12h14\"/>", "plusc": "<circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M12 8v8M8 12h8\"/>", "play": "<path d=\"M8 5l11 7-11 7z\"/>", "user": "<circle cx=\"12\" cy=\"8\" r=\"4\"/><path d=\"M4.5 20c0-4 3.5-6 7.5-6s7.5 2 7.5 6\"/>", "gear": "<circle cx=\"12\" cy=\"12\" r=\"3\"/><path d=\"M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1\"/>", "heart": "<path d=\"M12 20s-7.5-4.6-7.5-10A4.3 4.3 0 0 1 12 7.5 4.3 4.3 0 0 1 19.5 10c0 5.4-7.5 10-7.5 10z\"/>", "more": "<g fill=\"currentColor\" stroke=\"none\"><circle cx=\"12\" cy=\"5\" r=\"1.4\"/><circle cx=\"12\" cy=\"12\" r=\"1.4\"/><circle cx=\"12\" cy=\"19\" r=\"1.4\"/></g>", "image": "<rect x=\"4\" y=\"5\" width=\"16\" height=\"14\" rx=\"2\"/><circle cx=\"9\" cy=\"10\" r=\"1.5\"/><path d=\"M4 17l5-4 4 3 3-2 4 3\"/>", "close": "<path d=\"M6 6l12 12M18 6L6 18\"/>", "back": "<path d=\"M15 5l-7 7 7 7\"/>", "down": "<path d=\"M6 9l6 6 6-6\"/>", "right": "<path d=\"M9 5l7 7-7 7\"/>", "shorts": "<rect x=\"7\" y=\"3\" width=\"10\" height=\"18\" rx=\"3\"/><path d=\"M11 9.5l3 2.5-3 2.5z\"/>", "subs": "<rect x=\"4\" y=\"8\" width=\"16\" height=\"11\" rx=\"2\"/><path d=\"M7 5h10\"/>", "lib": "<rect x=\"4\" y=\"9\" width=\"16\" height=\"10\" rx=\"2\"/><path d=\"M7 5.5h10\"/>"};
+const ic = (n,s=20,f=false)=>`<svg viewBox="0 0 24 24" width="${s}" height="${s}" fill="${f?'currentColor':'none'}" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${I[n]}</svg>`;
+const AV = ic('user',26,true);
+const KEY = "galaxy-event-v2";
+let S;
+try { S = JSON.parse(localStorage.getItem(KEY)); } catch(e){}
+if (!S) S = { posts: JSON.parse(JSON.stringify(SEED_POSTS)), chats: JSON.parse(JSON.stringify(CHATS)), liked:{}, myNick:{}, sms: JSON.parse(JSON.stringify(SMS)) };
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){ toast("저장 공간이 부족합니다"); } }
+function esc(s){ return String(s).replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+function toast(m){ const t=$("toast"); t.textContent=m; t.classList.add("on"); setTimeout(()=>t.classList.remove("on"),1500); }
+function randNick(){ return "S" + String(Math.floor(Math.random()*1000)).padStart(3,"0"); }
+function uid(){ return "x"+Date.now().toString(36)+Math.random().toString(36).slice(2,6); }
+function nowLabel(){ return "방금"; }
+
+/* ---- 화면 전환 ---- */
+const lightViews = ["galview"];
+function show(id){
+  if($("drawer")) toggleMenu(false);
+  document.querySelectorAll(".view").forEach(v=>v.classList.remove("on"));
+  $(id).classList.add("on");
+  const st=$("status"); st.classList.toggle("light", lightViews.includes(id)); $("nav").classList.toggle("dark", ["home","galview"].includes(id));
+  st.style.background = id==="room" ? "#b2c7da" : id==="galview" ? "#000" : "#fff";
+  st.style.position = "relative"; st.style.width="100%";
+  if(id!=="ytw") $("ytplayer").innerHTML="";
+}
+function goHome(){ show("home"); }
+/* 내비게이션 바의 뒤로가기: 현재 화면 -> 상위 화면 */
+const BACK = { comm:"boards", boards:"home", talk:"home", insta:"home", gallery:"home", smsl:"home", write:"comm", detail:"comm", room:"talk", galview:"gallery", smst:"smsl", yt:"home", ytw:"yt" };
+function goBack(){
+  const cur=document.querySelector(".view.on").id, up=BACK[cur];
+  if(!up) return;                       // 홈 화면에서는 동작 없음
+  show(up);
+  if(up==="comm") renderFeed(); if(up==="boards") renderBoards(); if(up==="talk") talkTab(curTab); if(up==="smsl") renderSmsList();
+}
+document.querySelectorAll("[data-open]").forEach(a=>a.onclick=()=>{
+  const id=a.dataset.open; show(id);
+  if(id==="comm"){ show("boards"); renderBoards(); } if(id==="talk") talkTab(curTab); if(id==="insta") renderInsta(); if(id==="yt") renderYt(); if(id==="gallery") renderGallery(); if(id==="smsl") renderSmsList();
+});
+
+/* ---- 시계 ---- */
+function tick(){
+  const d=new Date(), h=d.getHours()%12||12, m=String(d.getMinutes()).padStart(2,"0");
+  $("stime").textContent=h+":"+m;
+}
+tick(); setInterval(tick,20000);
+
+/* ---- 커뮤니티 ---- */
+let curPost=null, replyTarget=null;
+function likeBtn(id,n){
+  const on=S.liked[id];
+  return `<button class="lk ${on?'on':''}" onclick="event.stopPropagation();toggleLike('${id}')">${ic('heart',22,on)} ${n}</button>`;
+}
+function findItem(id){
+  for(const p of S.posts){
+    if(p.id===id) return p;
+    for(const c of p.comments){ if(c.id===id) return c; for(const r of c.replies||[]) if(r.id===id) return r; }
+  }
+}
+function toggleLike(id){
+  const it=findItem(id); if(!it) return;
+  if(S.liked[id]){ delete S.liked[id]; it.likes--; } else { S.liked[id]=1; it.likes++; }
+  save(); $("detail").classList.contains("on") ? renderDetail() : renderFeed();
+}
+function countC(p){ return p.comments.reduce((a,c)=>a+1+(c.replies||[]).length,0); }
+const IC_UP=ic('thumb',14), IC_CM=ic('chat',14);
+let curBoard="review", wImgs=[];
+const boardName=id=>BOARDS.find(b=>b.id===id).name;
+const pv=p=>(p.title||p.text).replace(/\n/g," ");
+function renderBoards(){
+  $("school").textContent=SCHOOL;
+  const d=new Date(), dateStr=(d.getMonth()+1)+"월 "+d.getDate()+"일 ("+"일월화수목금토"[d.getDay()]+")";
+  const na="toast('사용할 수 없습니다')";
+  const hot=[...S.posts].sort((a,b)=>b.likes-a.likes);
+  const sh=(t)=>`<div class="sh"><b>${t}</b><span class="mr" onclick="${na}">더보기 ${ic('right',12)}</span></div>`;
+  const cnt=p=>`<span class="r"><b class="up">${IC_UP} ${p.likes}</b><b class="cc">${IC_CM} ${countC(p)}</b></span>`;
+  let h=`<div class="card todo"><div class="ct">오늘의 할일</div><div class="cd">${dateStr}</div><div class="tb"><span onclick="${na}">${ic('plus',13)} 추가</span><span onclick="${na}">${ic('menu',13)} 전체 보기</span></div></div>`;
+  h+=sh("즐겨찾는 게시판")+'<div class="card list">'+BOARDS.map(b=>{
+    const l=S.posts.find(p=>p.board===b.id);
+    return `<div class="bi" onclick="openBoard('${b.id}')"><div class="bn">${b.name}</div><div class="bp">${l?esc(pv(l).slice(0,22)):''}</div>${l?'<i class="nb">N</i>':''}</div>`; }).join("")
+   +DISABLED_BOARDS.map(n=>`<div class="bi" onclick="toast('사용할 수 없는 게시판입니다')"><div class="bn">${n}</div><div class="bp"></div></div>`).join("")+'</div>';
+  h+=sh("실시간 인기 글")+hot.slice(0,2).map(p=>`<div class="card pcard" onclick="openPostFrom('${p.id}')"><div class="pt"><span class="pf s">${AV}</span><b>${esc(p.nick)}</b><span class="pd">${esc(p.time)}</span></div><div class="pc">${esc(pv(p))}</div><div class="pb"><span>${boardName(p.board)}</span>${cnt(p)}</div></div>`).join("");
+  h+=sh("최근 강의평")+LECTURES.map(l=>`<div class="card lec"><div class="stars">${"★".repeat(l.stars)}${"☆".repeat(5-l.stars)}</div><div class="lt"><b>${esc(l.course)}</b> ${esc(l.text)}</div></div>`).join("");
+  h+=sh("HOT 게시물")+'<div class="card list">'+hot.slice(0,4).map(p=>`<div class="hr" onclick="openPostFrom('${p.id}')"><span class="hd">${esc(p.time)}</span><span class="hp">${esc(pv(p))}</span>${cnt(p)}</div>`).join("")+'</div>';
+  h+=sh("교내 소식")+'<div class="card list">'+NEWS.map(n=>`<div class="hr" onclick="${na}"><span class="hp">${esc(n)}</span></div>`).join("")+'</div><div style="height:12px"></div>';
+  $("blbody").innerHTML=h;
+}
+function openPostFrom(id){ curBoard=S.posts.find(p=>p.id===id).board; openPost(id); }
+function openBoard(id){ curBoard=id; show("comm"); renderFeed(); $("feed").scrollTop=0; }
+function renderFeed(){
+  const f=$("feed");
+  $("ctitle").textContent=boardName(curBoard);
+  const list=S.posts.filter(p=>p.board===curBoard);
+  if(!list.length){ f.innerHTML='<div class="empty">아직 게시물이 없습니다.<br>첫 글을 남겨보세요!</div>'; return; }
+  f.innerHTML=list.map(p=>`<div class="et" onclick="openPost('${p.id}')"><div class="etb"><div class="etc">
+      ${p.title?`<div class="ptitle">${esc(p.title)}</div>`:''}
+      <div class="txt clamp">${esc(p.text)}</div><div class="more">더보기</div></div>
+      ${(p.images&&p.images.length)?`<div class="th" style="background-image:url('${p.images[0]}')"></div>`:''}</div>
+      <div class="etm"><span>${esc(p.time)}</span><span>${esc(p.nick)}</span><span class="r"><b class="up">${IC_UP} ${p.likes}</b><b class="cc">${IC_CM} ${countC(p)}</b></span></div></div>`).join("");
+  f.querySelectorAll(".clamp").forEach(el=>{ if(el.scrollHeight>el.clientHeight+1) el.nextElementSibling.style.display="block"; });
+}
+/* 사진 첨부 (최대 3장, 자동 축소) */
+function renderPrev(){
+  $("wprev").innerHTML=wImgs.map((u,i)=>`<div style="background-image:url('${u}')"><i onclick="wImgs.splice(${i},1);renderPrev()">×</i></div>`).join("");
+  $("wcnt").textContent=wImgs.length+"/3";
+}
+function addPhotos(inp){
+  [...inp.files].slice(0,Math.max(0,3-wImgs.length)).forEach(f=>{
+    const r=new FileReader();
+    r.onload=()=>{ const im=new Image(); im.onload=()=>{
+      const sc=Math.min(1,720/Math.max(im.width,im.height)), c=document.createElement("canvas");
+      c.width=Math.round(im.width*sc); c.height=Math.round(im.height*sc);
+      c.getContext("2d").drawImage(im,0,0,c.width,c.height);
+      wImgs.push(c.toDataURL("image/jpeg",.7)); renderPrev(); }; im.src=r.result; };
+    r.readAsDataURL(f);
+  });
+  inp.value="";
+}
+function openWrite(){
+  const isFree=curBoard==="free";
+  $("wtitle").style.display=isFree?"block":"none"; $("wtitle").value=""; $("wtxt").value=""; wImgs=[]; renderPrev();
+  $("wh").textContent=boardName(curBoard)+" 글쓰기";
+  show("write"); (isFree?$("wtitle"):$("wtxt")).focus();
+}
+function submitPost(){
+  const isFree=curBoard==="free", title=$("wtitle").value.trim(), t=$("wtxt").value.trim();
+  if(isFree&&!title){ toast("제목을 입력해주세요"); return; }
+  if(!t&&!wImgs.length){ toast("내용을 입력해주세요"); return; }
+  const id=uid(), nick=randNick(); S.myNick[id]=nick;
+  S.posts.unshift({ id, board:curBoard, nick, title:isFree?title:"", text:t, images:[...wImgs], likes:0, time:nowLabel(), comments:[] });
+  save(); show("comm"); renderFeed(); $("feed").scrollTop=0;
+}
+function openPost(id){ curPost=id; replyTarget=null; setReply(null); show("detail"); renderDetail(); }
+function renderDetail(){
+  const p=S.posts.find(x=>x.id===curPost); if(!p) return;
+  $("dtitle").textContent=boardName(p.board);
+  const on=S.liked[p.id];
+  let h=`<div class="dp"><div class="dau"><div class="pf">${AV}</div><div><div class="dn">${esc(p.nick)}${S.myNick[p.id]===p.nick?' <small>(나)</small>':''}</div><div class="dt">${esc(p.time)}</div></div></div>
+    ${p.title?`<div class="ptitle" style="font-size:17px;margin:12px 0 6px">${esc(p.title)}</div>`:'<div style="height:10px"></div>'}
+    <div class="dtx">${esc(p.text)}</div>
+    ${(p.images||[]).map(u=>`<img class="dimg" src="${u}" alt="">`).join("")}
+    <div class="etm" style="margin-top:12px"><button class="lkb ${on?'on':''}" onclick="toggleLike('${p.id}')">${ic('thumb',15,on)} ${p.likes}</button><b class="cc">${IC_CM} ${countC(p)}</b></div></div>`;
+  if(!p.comments.length) h+='<div class="empty" style="padding:30px 0">첫 댓글을 남겨보세요</div>';
+  p.comments.forEach(c=>{ h+=cmHtml(c,false); (c.replies||[]).forEach(r=>h+=cmHtml(r,true)); });
+  const b=$("dbody"), st=b.scrollTop; b.innerHTML=h; b.scrollTop=st;
+}
+function cmHtml(c,isRe){
+  const mine=S.myNick[curPost]===c.nick, on=S.liked[c.id];
+  return `<div class="ec ${isRe?'re':''}"><div class="ech"><span class="pf s">${AV}</span><b>${esc(c.nick)}${isOP(c.nick)?'<small class="op">글쓴이</small>':''}${mine?'<small>(나)</small>':''}</b>
+    <span class="ea"><button onclick="setReply('${c.id}')">${IC_CM}</button><button class="${on?'on':''}" onclick="toggleLike('${c.id}')">${ic('thumb',14,on)}</button></span></div>
+    <div class="ect">${c.to?`<span class="to">${esc(c.to)}</span> `:''}${esc(c.text)}</div>
+    <div class="ecm">${esc(c.time)}${c.likes?` <b class="up">${IC_UP} ${c.likes}</b>`:''}</div></div>`;
+}
+function setReply(cid){
+  replyTarget=cid; const box=$("rto");
+  if(cid){ const c=findItem(cid); $("rtxt").textContent=c.nick+" 님에게 답글 작성 중"; box.style.display="flex"; $("cin").focus(); }
+  else box.style.display="none";
+}
+/* 한 글 안에서 내 닉네임은 항상 같고, 다른 사람과 겹치지 않음 */
+function nickFor(p){
+  if(S.myNick[p.id]) return S.myNick[p.id];
+  const used=new Set([p.nick]);
+  p.comments.forEach(c=>{ used.add(c.nick); (c.replies||[]).forEach(r=>used.add(r.nick)); });
+  let n; do{ n=randNick(); }while(used.has(n));
+  return S.myNick[p.id]=n;
+}
+function isOP(n){ const p=S.posts.find(x=>x.id===curPost); return p&&p.nick===n; }
+function submitComment(){
+  const t=$("cin").value.trim(); if(!t) return;
+  const p=S.posts.find(x=>x.id===curPost);
+  const item={ id:uid(), nick:nickFor(p), text:t, likes:0, time:nowLabel() };
+  if(replyTarget){   // 댓글 또는 대댓글에 답글 (대댓글에 달면 @닉네임 표시)
+    const top=p.comments.find(x=>x.id===replyTarget);
+    const par=top||p.comments.find(c=>(c.replies||[]).some(r=>r.id===replyTarget));
+    if(!top) item.to="@"+findItem(replyTarget).nick;
+    (par.replies=par.replies||[]).push(item);
+  }
+  else { item.replies=[]; p.comments.push(item); }
+  $("cin").value=""; setReply(null); save(); renderDetail();
+  const b=$("dbody"); b.scrollTop=b.scrollHeight;
+}
+
+/* ---- 헌톡 ---- */
+let curTab="f", curRoom=null;
+function talkTab(t){
+  curTab=t; $("tab-f").classList.toggle("on",t==="f"); $("tab-c").classList.toggle("on",t==="c");
+  $("ttitle").textContent=t==="f"?"친구":"채팅";
+  let h="";
+  if(t==="f"){
+    h+=`<div class="ppl"><div class="av">${AV}</div><div><div class="n">${esc(ME.name)}</div></div></div><div class="sec">친구 ${S.chats.filter(c=>!c.name.includes("(")).length}</div>`;
+    S.chats.filter(c=>!c.name.includes("(")).forEach(c=>{
+      h+=`<div class="ppl" onclick="openRoom('${c.id}')"><div class="av">${AV}</div><div><div class="n">${esc(c.name)}</div><div class="s">${esc(c.status)}</div></div></div>`;
+    });
+  } else {
+    S.chats.forEach(c=>{
+      const last=c.msgs[c.msgs.length-1]||{text:"",time:""};
+      h+=`<div class="ppl" onclick="openRoom('${c.id}')"><div class="av">${AV}</div>
+        <div><div class="n">${esc(c.name)}</div><div class="s">${esc(last.text)}</div></div>
+        <div class="e">${esc(last.time)}<br>${c.unread?`<span class="badge">${c.unread}</span>`:""}</div></div>`;
+    });
+  }
+  $("tbody").innerHTML=h;
+}
+function openRoom(id){
+  curRoom=S.chats.find(c=>c.id===id); curRoom.unread=0; save();
+  $("rname").textContent=curRoom.name; show("room"); renderMsgs();
+}
+function closeRoom(){ show("talk"); talkTab(curTab); }
+function renderMsgs(){
+  let h='<div class="day">오늘</div>';
+  curRoom.msgs.forEach(m=>{
+    const me=m.from==="me";
+    h+=`<div class="m ${me?'me':''}">${me?'':`<div class="av">${AV}</div>`}
+      <div>${!me&&m.who?`<div class="who">${esc(m.who)}</div>`:''}<div class="bub">${esc(m.text)}</div></div>
+      <span class="tm">${esc(m.time)}</span></div>`;
+  });
+  const b=$("msgs"); b.innerHTML=h; b.scrollTop=b.scrollHeight;
+}
+function sendMsg(){
+  const i=$("min"), t=i.value.trim(); if(!t) return;
+  const d=new Date(), h=d.getHours();
+  curRoom.msgs.push({ from:"me", text:t, time:(h<12?"오전 ":"오후 ")+(h%12||12)+":"+String(d.getMinutes()).padStart(2,"0") });
+  i.value=""; save(); renderMsgs();
+}
+/* ---- 공용 ---- */
+function tm(){ const d=new Date(),h=d.getHours(); return (h<12?"오전 ":"오후 ")+(h%12||12)+":"+String(d.getMinutes()).padStart(2,"0"); }
+const pic=o=>o.img?`background-image:url('${o.img}')`:`background:${o.bg}`;
+
+/* ---- 인스타그램 ---- */
+function renderInsta(){
+  let h='<div class="stories">'+INSTA.map(p=>`<div class="story"><div class="rg"><div>${AV}</div></div>${esc(p.user.slice(0,9))}</div>`).join("")+'</div>';
+  h+=INSTA.map(p=>{ const on=S.liked[p.id]; return `<div class="igp">
+    <div class="top"><div class="av" style="width:32px;height:32px;border-radius:50%;font-size:16px">${AV}</div>${esc(p.user)}</div>
+    <div class="pic" style="${pic(p)}"></div>
+    <div class="acts"><button class="lk ${on?'on':''}" style="font-size:22px" onclick="igLike('${p.id}')">${ic('heart',22,on)}</button> <span style="font-weight:600;font-size:13px">좋아요 ${p.likes+(on?1:0)}개</span></div>
+    <div class="cap"><b>${esc(p.user)}</b> ${esc(p.caption)}${p.comments.map(c=>`<div style="color:#555"><b>${esc(c.user)}</b> ${esc(c.text)}</div>`).join("")}<div class="time" style="margin:4px 0 0">${esc(p.time)}</div></div></div>`; }).join("");
+  $("igbody").innerHTML=h;
+}
+function igLike(id){ if(S.liked[id]) delete S.liked[id]; else S.liked[id]=1; save(); const b=$("igbody"),y=b.scrollTop; renderInsta(); b.scrollTop=y; }
+
+/* ---- 유튜브 ---- */
+function renderYt(){
+  $("ytbody").innerHTML=YOUTUBE.map(v=>`<div class="yv" onclick="openVideo('${v.id}')">
+    <div class="thumb" style="${pic(v)}"><span class="dur">${esc(v.duration)}</span></div>
+    <div class="yi"><div class="av" style="background:#c3c8d0;color:#fff;display:flex;align-items:center;justify-content:center;flex:none">${AV}</div>
+    <div><div class="tt">${esc(v.title)}</div><div class="sub">${esc(v.channel)} · ${esc(v.views)} · ${esc(v.time)}</div></div></div></div>`).join("");
+}
+let curVid=null;
+function openVideo(id){
+  curVid=YOUTUBE.find(x=>x.id===id);
+  $("ytplayer").innerHTML=curVid.video
+    ? `<video src="${curVid.video}" controls autoplay playsinline style="width:100%;aspect-ratio:16/9;background:#000;display:block"></video>`
+    : `<div class="thumb" style="${pic(curVid)}"><div class="play" onclick="toast('동영상을 재생할 수 없습니다')">${ic('play',24,true)}</div></div>`;
+  show("ytw"); renderYtw();
+}
+function renderYtw(){
+  const v=curVid, on=S.liked[v.id], sub=S.liked["sub:"+v.channel];
+  $("ytwbody").innerHTML=`<div class="ywt">${esc(v.title)}</div><div class="ywm">${esc(v.views)} · ${esc(v.time)}</div>
+   <div class="ych"><div class="av" style="width:36px;height:36px;border-radius:50%;font-size:18px">${AV}</div><b>${esc(v.channel)}</b>
+   <button class="sbtn ${sub?'on':''}" onclick="ytSub()">${sub?'구독중':'구독'}</button></div>
+   <div style="padding:0 14px 8px"><button class="lk ${on?'on':''}" style="font-size:15px;background:#f2f2f2;border-radius:18px;padding:8px 14px" onclick="ytLike()">${ic('thumb',18,on)} ${v.likes+(on?1:0)}</button></div>
+   <div class="ywd">${esc(v.desc)}</div>`;
+}
+function ytLike(){ const k=curVid.id; if(S.liked[k]) delete S.liked[k]; else S.liked[k]=1; save(); renderYtw(); }
+function ytSub(){ const k="sub:"+curVid.channel; if(S.liked[k]) delete S.liked[k]; else S.liked[k]=1; save(); renderYtw(); }
+
+/* ---- 갤러리 ---- */
+function renderGallery(){ $("gbody").innerHTML=GALLERY.map(g=>`<div class="pic" style="${pic(g)}" onclick="openPhoto('${g.id}')"></div>`).join(""); }
+function openPhoto(id){
+  const g=GALLERY.find(x=>x.id===id); $("gvt").textContent=g.title+" · "+g.date;
+  $("gvbody").innerHTML=`<div class="pic" style="${pic(g)};font-size:140px"></div>`; show("galview");
+}
+
+/* ---- 메시지(문자) ---- */
+let curSms=null;
+function renderSmsList(){
+  $("slbody").innerHTML=S.sms.map(c=>{ const l=c.msgs[c.msgs.length-1]||{text:"",time:""};
+    return `<div class="ppl" onclick="openSms('${c.id}')"><div class="av">${AV}</div><div><div class="n">${esc(c.name)}</div><div class="s">${esc(l.text)}</div></div><div class="e">${esc(l.time)}</div></div>`; }).join("");
+}
+function openSms(id){ curSms=S.sms.find(c=>c.id===id); $("stname").textContent=curSms.name; show("smst"); renderSmsMsgs(); }
+function renderSmsMsgs(){
+  let h='<div class="day" style="background:#bbb">오늘</div>';
+  curSms.msgs.forEach(m=>{ const me=m.from==="me";
+    h+=`<div class="m ${me?'me':''}"><div class="bub">${esc(m.text)}</div><span class="tm">${esc(m.time)}</span></div>`; });
+  const b=$("stmsgs"); b.innerHTML=h; b.scrollTop=b.scrollHeight;
+}
+function sendSms(){
+  const i=$("sin"), t=i.value.trim(); if(!t) return;
+  curSms.msgs.push({ from:"me", text:t, time:tm() }); i.value=""; save(); renderSmsMsgs();
+}
+
+/* ---- 링크 ---- */
+function openLink(k){ window.open(LINKS[k],"_blank","noopener"); }
+
+/* ---- 시작 화면: 커뮤니티 > 후기 게시판 ---- */
+if(COMM_ICON_IMG) document.querySelector('[data-open="comm"] .ico').innerHTML='<img src="'+COMM_ICON_IMG+'" alt="" style="width:100%;height:100%;object-fit:cover">';
+show("comm"); renderFeed();
+</script>
+</body>
+</html>
